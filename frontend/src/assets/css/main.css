@@ -1,0 +1,8 @@
+:root {
+    --bulma-size-tiny: 0.5rem;
+    --bulma-radius-tiny: 0.20rem;
+}
+.button.is-tiny {
+    --bulma-control-size: var(--bulma-size-tiny);
+    --bulma-control-radius: var(--bulma-radius-tiny);
+}

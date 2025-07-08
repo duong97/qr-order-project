@@ -11,4 +11,15 @@ model Category {
   id        Int     @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
+  products  Product[]  @relation("ProductCategories")
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  name        String
+  price       Float
+  description String?
+  thumbnail   String?
+  createdAt   DateTime @default(now())
+  categories  Category[]  @relation("ProductCategories")
 }

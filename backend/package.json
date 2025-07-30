@@ -4,7 +4,7 @@
   "description": "Backend API & Realtime for QR Order System",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/server.ts",
+    "dev": "ts-node-dev --respawn --require tsconfig-paths/register src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
@@ -24,6 +24,7 @@
     "@types/socket.io": "^3.0.2",
     "prisma": "^5.0.0",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
   }
 }

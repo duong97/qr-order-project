@@ -1,6 +1,5 @@
 import express from "express";
-import categoryRoutes from "./routes/category.route";
-import productRoutes from './routes/product.route';
+import router from './routes';
 import { PrismaClient } from '@prisma/client';
 
 const app = express();
@@ -18,7 +17,7 @@ app.get("/version", (req, res) => {
 app.get("/test-connection", (req, res) => {
     const prisma = new PrismaClient();
     try {
-        prisma.$connect().then((a) => {
+        prisma.$connect().then(() => {
             res.send("✅ Success");
         })
     } catch (error) {
@@ -28,7 +27,6 @@ app.get("/test-connection", (req, res) => {
     }
 });
 
-app.use("/api/categories", categoryRoutes);
-app.use('/api/products', productRoutes);
+app.use('/api', router);
 
 export default app;

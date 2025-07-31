@@ -1,6 +1,7 @@
 import express from "express";
 import router from './routes';
 import { PrismaClient } from '@prisma/client';
+import { errorHandler } from '@/core/middleware/errorHandler';
 
 const app = express();
 
@@ -28,5 +29,8 @@ app.get("/test-connection", (req, res) => {
 });
 
 app.use('/api', router);
+
+// *** Error handler middleware nằm cuối cùng
+app.use(errorHandler);
 
 export default app;

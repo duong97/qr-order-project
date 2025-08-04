@@ -3,11 +3,14 @@ import { CategoryController } from '@/modules/category/category.controller';
 import { authMiddleware } from '@/core/middleware/authMiddleware';
 import { validate } from '@/core/middleware/validate';
 import { createCategorySchema } from '@/modules/category/category.validator';
+import {ProductController} from "@/modules/product/product.controller";
+import {createProductSchema} from "@/modules/product/product.validator";
 
 const router = Router();
 
 const routes = [
     { path: '/categories', controller: new CategoryController(), validateMiddleware: validate(createCategorySchema) },
+    { path: '/products', controller: new ProductController(), validateMiddleware: validate(createProductSchema) },
     // { path: '/menus', controller: new MenuController() }, // Thêm nữa ở đây
 ];
 

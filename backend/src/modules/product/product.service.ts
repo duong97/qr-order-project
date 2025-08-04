@@ -1,9 +1,9 @@
 import {BaseService} from '@/core/base/base.service';
-import {CategoryRepository} from './category.repository';
+import {ProductRepository} from './product.repository';
 import {ValidationError} from "@/core/middleware/errorHandler";
 
-export class CategoryService extends BaseService<CategoryRepository> {
-    constructor(repository: CategoryRepository) {
+export class ProductService extends BaseService<ProductRepository> {
+    constructor(repository: ProductRepository) {
         super(repository);
     }
 

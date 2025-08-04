@@ -71,7 +71,9 @@ export class BaseApi {
             rqOptions
         )
             .then(res => res.json())
-            .then((res) => res)
+            .then((res) => {
+                return res.data || {};
+            })
     }
 
     async list() {

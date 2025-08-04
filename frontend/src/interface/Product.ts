@@ -5,6 +5,7 @@ export default interface Product {
     description: string,
     thumbnail: string,
     category?: number,
+    categories?: number[],
     categoryName?: string,
     options: number[]
 }

@@ -4,6 +4,11 @@ import {ZodError, ZodSchema} from 'zod';
 export const validate =
     (schema: ZodSchema<any>) =>
         (req: Request, res: Response, next: NextFunction) => {
+            // Chỉ validate khi create / update
+            if (req.method !== 'POST' && req.method !== 'PUT') {
+                return next();
+            }
+
             try {
                 req.body = schema.parse(req.body);
                 next();

@@ -66,7 +66,7 @@ export default defineComponent({
             <div class="box">
                 <p class="title is-4">{{ category.name }}</p>
                 <div v-for="item in productStore.items" :key="item.id">
-                    <qrt-item :item="item" v-if="category.id === item.category"></qrt-item>
+                    <qrt-item :item="item" v-if="item.categories?.includes(category.id)"></qrt-item>
                 </div>
             </div>
             <!-- END list items group by category -->

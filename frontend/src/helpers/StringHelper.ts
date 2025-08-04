@@ -28,6 +28,9 @@ export class StringHelper {
     }
 
     public static convertDriveLinkToDirectImageUrl(driveLink: string, width: number|string = 100): string {
+        if (!driveLink) {
+            return '/images/bread.jpeg';
+        }
         if (!driveLink.startsWith('https://drive.google.com/')) {
             return driveLink;
         }

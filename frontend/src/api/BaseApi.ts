@@ -65,7 +65,6 @@ export class BaseApi {
             method,
             ...(hasBody && { body: formData }),
         });
-        console.log(rqOptions)
         return fetch(
             this.buildApiUrl(),
             rqOptions

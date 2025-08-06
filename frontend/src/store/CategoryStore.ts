@@ -13,7 +13,6 @@ export const useCategoryStore = defineStore('category', {
     actions: {
         async fetch() {
             this.items = await categoryApi.list();
-            console.log('categories: ', this.items)
         },
         async createOrUpdate(category: Category) {
             if (category.id) {

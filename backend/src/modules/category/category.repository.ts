@@ -7,6 +7,6 @@ export class CategoryRepository extends BaseRepository<typeof prisma.category> {
     }
 
     async findByName(name: string) {
-        return prisma.category.findFirst({ where: { name } });
+        return this.model.findFirst({ where: { name } });
     }
 }

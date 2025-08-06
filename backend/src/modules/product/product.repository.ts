@@ -7,6 +7,6 @@ export class ProductRepository extends BaseRepository<typeof prisma.product> {
     }
 
     async findByName(name: string) {
-        return prisma.product.findFirst({ where: { name } });
+        return this.model.findFirst({ where: { name } });
     }
 }

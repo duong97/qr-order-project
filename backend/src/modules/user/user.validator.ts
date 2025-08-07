@@ -16,5 +16,16 @@ export class UserValidator extends BaseValidator {
     onCreate = createAndUpdateValidator
     onUpdate = createAndUpdateValidator
 
-    static onLogin = z.object({})
+    static onLogin = z.object({
+        username: z
+            .string("Username is required")
+            .nonempty("Username is required")
+            .max(255, { message: 'Username must be at most 255 characters' })
+        ,
+        password: z
+            .string("Password is required")
+            .nonempty("Password is required")
+            .max(255, { message: 'Password must be at most 255 characters' })
+        ,
+    })
 }

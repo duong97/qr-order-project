@@ -8,8 +8,9 @@ import {CategoryController} from '@/modules/category/category.controller';
 import {ProductController} from "@/modules/product/product.controller";
 import {UserController} from "@/modules/user/user.controller";
 
-const router = Router();
-router.use(authMiddleware);
+const adminRouter = Router();
+adminRouter.use(authMiddleware);
+const routePrefix = '/admin';
 
 const routes = [
     {path: '/categories', controller: new CategoryController(), validator: new CategoryValidator()},
@@ -19,16 +20,14 @@ const routes = [
 
 for (const route of routes) {
     const {path, controller, validator} = route;
-    const _router = Router();
+    const basePath = routePrefix + path;
 
     // CRUD router
-    _router.get('/', controller.index?.bind(controller));
-    _router.get('/:id', controller.show?.bind(controller));
-    _router.post('/', [validate(validator.onCreate)], controller.store?.bind(controller));
-    _router.put('/:id', [validate(validator.onUpdate)], controller.update?.bind(controller));
-    _router.delete('/:id', [validate(validator.onDelete)], controller.destroy?.bind(controller));
-
-    router.use(path, _router);
+    adminRouter.get(basePath, controller.index?.bind(controller));
+    adminRouter.get(basePath + '/:id', controller.show?.bind(controller));
+    adminRouter.post(basePath, [validate(validator.onCreate)], controller.store?.bind(controller));
+    adminRouter.put(basePath + '/:id', [validate(validator.onUpdate)], controller.update?.bind(controller));
+    adminRouter.delete(basePath + '/:id', [validate(validator.onDelete)], controller.destroy?.bind(controller));
 }
 
-export default router;
+export default adminRouter;

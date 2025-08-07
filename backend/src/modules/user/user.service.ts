@@ -22,4 +22,11 @@ export class UserService extends BaseService<UserRepository> {
         ]);
         return this.repository.update(id, data);
     }
+
+    async findByUsername(username: string | null) {
+        if (!username) {
+            return null;
+        }
+        return await this.repository.findByUsername(username);
+    }
 }

@@ -5,6 +5,7 @@ const router = Router();
 
 // Public router
 const _publicController = new PublicController();
-router.use('/public/products', _publicController.products?.bind(_publicController));
+router.get('/public/products', _publicController.products?.bind(_publicController));
+router.get('/public/categories', _publicController.categories?.bind(_publicController));
 
 export default router;

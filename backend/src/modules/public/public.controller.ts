@@ -1,6 +1,5 @@
 import {NextFunction, Request, Response} from "express";
 import {PublicService} from "@/modules/public/public.service";
-import {Product} from "@prisma/client";
 
 export class PublicController {
     protected service: PublicService;
@@ -25,6 +24,15 @@ export class PublicController {
                 categories: product.categories?.map((category: any) => category.id),
             }));
             res.json({success: true, data: mappedData});
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    categories = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const data = await this.service.categories({});
+            res.json({success: true, data});
         } catch (err) {
             next(err);
         }

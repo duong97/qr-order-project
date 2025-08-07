@@ -6,7 +6,7 @@ import authRouter from "./auth";
 const router = Router();
 
 router.use(publicRouter);
-router.use(adminRouter);
 router.use(authRouter);
+router.use(adminRouter);
 
 export default router;

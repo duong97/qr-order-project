@@ -1,6 +1,7 @@
 import {BaseService} from '@/core/base/base.service';
 import {UserRepository} from './user.repository';
-import {ValidationError} from "@/core/middleware/errorHandler";
+import {AppError, ValidationError} from "@/core/middleware/errorHandler";
+import bcrypt from "bcrypt";
 
 export class UserService extends BaseService<UserRepository> {
     constructor(repository: UserRepository) {
@@ -8,19 +9,34 @@ export class UserService extends BaseService<UserRepository> {
     }
 
     async create(data: any) {
-        const existing = await this.repository.findByUsername(data.name);
+        data.password = await bcrypt.hash(data.password, 10);
+        const existing = await this.repository.findByUsername(data.username);
         if (existing) throw new ValidationError([
-            {path: ['name'], message: 'Name already exists'},
+            {path: ['name'], message: 'Username already exists'},
         ]);
-        return this.repository.create(data);
+        const createdUser = await this.repository.create(data);
+
+        if (!createdUser?.id) throw new AppError("Create user failed!");
+
+        return {
+            id: createdUser.id,
+            username: createdUser.username,
+        }
     }
 
     async update(id: number, data: any) {
-        const existing = await this.repository.findByUsername(data.name);
+        const existing = await this.repository.findByUsername(data.username);
         if (existing && existing.id !== id) throw new ValidationError([
-            {path: ['name'], message: 'Name already exists'},
+            {path: ['name'], message: 'Username already exists'},
         ]);
-        return this.repository.update(id, data);
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, 10);
+        }
+        const updatedUser = await this.repository.update(id, data);
+        return {
+            id: updatedUser.id,
+            username: updatedUser.username,
+        }
     }
 
     async findByUsername(username: string | null) {

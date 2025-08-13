@@ -1,10 +1,9 @@
-// src/core/base/base.controller.ts
 import { Request, Response, NextFunction } from 'express';
 
 export abstract class BaseController<TService> {
     protected service: TService;
 
-    constructor(service: TService) {
+    protected constructor(service: TService) {
         this.service = service;
     }
 
@@ -32,7 +31,9 @@ export abstract class BaseController<TService> {
     // POST /resource
     store = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const data = await (this.service as any).create(req.body);
+            const bodyData = req.body;
+            bodyData.createdBy = req.currentUser?.id;
+            const data = await (this.service as any).create(bodyData);
             res.status(201).json({ success: true, data });
         } catch (err) {
             next(err);
@@ -42,8 +43,9 @@ export abstract class BaseController<TService> {
     // PUT /resource/:id
     update = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id = req.params.id;
-            const data = await (this.service as any).update(id, req.body);
+            const id = +req.params.id;
+            const bodyData = req.body;
+            const data = await (this.service as any).update(id, bodyData);
             res.json({ success: true, data });
         } catch (err) {
             next(err);
@@ -53,7 +55,7 @@ export abstract class BaseController<TService> {
     // DELETE /resource/:id
     destroy = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const id = req.params.id;
+            const id = +req.params.id;
             const data = await (this.service as any).delete(id);
             res.json({ success: true, data });
         } catch (err) {

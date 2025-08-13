@@ -17,14 +17,14 @@ export class UserController extends BaseController<UserService> {
             return next(new AuthError('User not found'))
         }
 
-        const isMatch = bcrypt.compare(req.body.password, user.password);
+        const isMatch = await bcrypt.compare(req.body.password, user.password);
         if (!isMatch) {
             return next(new AuthError('Wrong password'))
         }
 
         const secret = process.env.JWT_SECRET || 'default_secret'
         const expiresIn ='24h';
-        const token = jwt.sign({ userId: user.id }, secret, { expiresIn });
+        const token = jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn });
         res.json({success: true, data: { token, expiresIn }});
     };
 }

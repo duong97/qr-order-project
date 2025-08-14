@@ -1,11 +1,11 @@
 <script lang="ts">
 import {defineComponent} from "vue";
 import {Button, showNotify, Tabs, Tab} from "vant";
-import {useFirebaseStore} from "@/store/FirebaseStore";
 import {useRouter} from "vue-router";
 import QrtAdminProductList from "@/components/admin/AdProductList.vue";
 import QrtAdminCategoryList from "@/components/admin/AdCategoryList.vue";
 import QrtAdminProductOptionList from "@/components/admin/AdProductOptionList.vue";
+import {useAuthStore} from "@/store/AuthStore";
 
 export default defineComponent({
     name: "qrt-admin-index",
@@ -23,24 +23,17 @@ export default defineComponent({
         }
     },
     setup() {
-        const firebaseStore = useFirebaseStore();
+        const authStore = useAuthStore();
         const router = useRouter();
 
-        // Check login state
-        firebaseStore.onAuthStateChanged((isLoggedIn) => {
-            if (!isLoggedIn) {
-                router.push('/login');
-            }
-        })
-
         return {
-            firebaseStore,
+            authStore,
             router,
         }
     },
     methods: {
         async logout() {
-            const isLogoutSuccess = await this.firebaseStore.logout();
+            const isLogoutSuccess = await this.authStore.logout();
             if (isLogoutSuccess) {
                 showNotify({ type: 'success', message: "Đã đăng xuất!"});
                 await this.router.push({path: '/login'});

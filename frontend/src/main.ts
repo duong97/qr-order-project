@@ -25,9 +25,8 @@ app.config.globalProperties.$filters = {
 app.use(createPinia())
 
 import { useTableStore } from '@/store/TableStore';
-import { useFirebaseStore } from '@/store/FirebaseStore';
 const tableStore = useTableStore();
-const firebaseStore = useFirebaseStore();
+const authStore = useAuthStore();
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -52,7 +51,7 @@ const router = createRouter({
             path: '/login',
             component: Login,
             beforeEnter: () => {
-                if (firebaseStore.isLoggedIn()) {
+                if (authStore.isLoggedIn()) {
                     return { path: '/admin' }
                 } else {
                     return true;
@@ -63,7 +62,7 @@ const router = createRouter({
             path: '/admin',
             component: AdminIndex,
             beforeEnter: () => {
-                if (firebaseStore.isLoggedIn()) {
+                if (authStore.isLoggedIn()) {
                     return true;
                 } else {
                     return { path: '/login' }
@@ -77,6 +76,7 @@ app.use(router)
 
 import { Locale } from 'vant';
 import enUS from 'vant/es/locale/lang/en-US';
+import {useAuthStore} from "@/store/AuthStore";
 Locale.use('en-US', enUS);
 
 app.mount('#app')

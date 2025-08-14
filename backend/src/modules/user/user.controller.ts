@@ -25,6 +25,16 @@ export class UserController extends BaseController<UserService> {
         const secret = process.env.JWT_SECRET || 'default_secret'
         const expiresIn ='24h';
         const token = jwt.sign({ id: user.id, username: user.username }, secret, { expiresIn });
-        res.json({success: true, data: { token, expiresIn }});
+        res.json({
+            success: true,
+            data: {
+                user: {
+                    id: user.id,
+                    username: user.username
+                },
+                token,
+                expiresIn
+            }
+        });
     };
 }

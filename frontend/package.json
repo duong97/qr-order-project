@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^11.1.0",
+    "axios": "^1.11.0",
     "bulma": "^1.0.2",
     "core-js": "^3.8.3",
     "firebase": "^10.14.0",

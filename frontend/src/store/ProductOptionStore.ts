@@ -12,7 +12,7 @@ export const useProductOptionStore = defineStore('productOption', {
     },
     actions: {
         async fetch() {
-            this.items = await productOptionApi.list();
+            // this.items = await productOptionApi.list();
         },
         async createOrUpdate(productOption: ProductOption) {
             if (productOption.id) {

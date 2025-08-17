@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
-import {ProductApi} from "@/api/ProductApi";
+import {ProductApi} from "@/api/admin/ProductApi";
 import Product from "@/interface/Product";
+import {PublicApi} from "@/api/public/PublicApi";
 
-const productApi = new ProductApi();
+const publicApi = new PublicApi();
+const adminProductApi = new ProductApi();
 
 export const useProductStore = defineStore('product', {
     state: () => {
@@ -12,17 +14,17 @@ export const useProductStore = defineStore('product', {
     },
     actions: {
         async fetch() {
-            this.items = await productApi.list();
+            this.items = await publicApi.products();
         },
         async createOrUpdate(product: Product) {
             if (product.id) {
-                return await productApi.update(product.id, product);
+                return await adminProductApi.update(product.id, product);
             } else {
-                return await productApi.create(product);
+                return await adminProductApi.create(product);
             }
         },
         async delete(id: number) {
-            return await productApi.delete(id);
+            return await adminProductApi.delete(id);
         }
     }
 })

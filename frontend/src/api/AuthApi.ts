@@ -1,14 +1,14 @@
 import CurrentUser from "@/interface/CurrentUser";
-import Api from "@/api/Api";
+import {BaseApi} from "@/api/BaseApi";
 
-export class AuthApi {
+export class AuthApi extends BaseApi {
     async login(username: string, password: string) {
-        const response = await Api.post('/auth/login', { username, password });
+        const response = await this.axiosInstance.post('/auth/login', { username, password });
         return response.data;
     }
 
     async logout(user: CurrentUser) {
-        const response = await Api.post('/auth/logout', { id: user.id });
+        const response = await this.axiosInstance.post('/auth/logout', { id: user.id });
         return response.data;
     }
 }

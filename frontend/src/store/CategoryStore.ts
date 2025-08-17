@@ -1,8 +1,10 @@
 import { defineStore } from 'pinia'
-import {CategoryApi} from "@/api/CategoryApi";
+import {CategoryApi} from "@/api/admin/CategoryApi";
 import Category from "@/interface/Category";
+import {PublicApi} from "@/api/public/PublicApi";
 
-const categoryApi = new CategoryApi();
+const publicApi = new PublicApi();
+const adminCategoryApi = new CategoryApi();
 
 export const useCategoryStore = defineStore('category', {
     state: () => {
@@ -12,17 +14,17 @@ export const useCategoryStore = defineStore('category', {
     },
     actions: {
         async fetch() {
-            this.items = await categoryApi.list();
+            this.items = await publicApi.categories();
         },
         async createOrUpdate(category: Category) {
             if (category.id) {
-                return await categoryApi.update(category.id, category);
+                return await adminCategoryApi.update(category.id, category);
             } else {
-                return await categoryApi.create(category);
+                return await adminCategoryApi.create(category);
             }
         },
         async delete(id: number) {
-            return await categoryApi.delete(id);
+            return await adminCategoryApi.delete(id);
         }
     }
 })

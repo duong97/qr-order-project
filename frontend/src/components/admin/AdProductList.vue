@@ -23,7 +23,7 @@ import Product from "@/interface/Product";
 import {useCategoryStore} from "@/store/CategoryStore";
 import {useProductStore} from "@/store/ProductStore";
 import {useProductOptionStore} from "@/store/ProductOptionStore";
-import {UploadImageApi} from "@/api/UploadImageApi";
+import {UploadImageApi} from "@/api/admin/UploadImageApi";
 import {StringHelper} from "@/helpers/StringHelper";
 
 interface SelectOption {

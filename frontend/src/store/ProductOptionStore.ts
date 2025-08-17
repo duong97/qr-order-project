@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import {ProductOptionApi} from "@/api/ProductOptionApi";
+import {ProductOptionApi} from "@/api/admin/ProductOptionApi";
 import ProductOption from "@/interface/ProductOption";
 
 const productOptionApi = new ProductOptionApi();
@@ -15,14 +15,14 @@ export const useProductOptionStore = defineStore('productOption', {
             // this.items = await productOptionApi.list();
         },
         async createOrUpdate(productOption: ProductOption) {
-            if (productOption.id) {
-                return await productOptionApi.update(productOption.id, productOption);
-            } else {
-                return await productOptionApi.create(productOption);
-            }
+            // if (productOption.id) {
+            //     return await productOptionApi.update(productOption.id, productOption);
+            // } else {
+            //     return await productOptionApi.create(productOption);
+            // }
         },
         async delete(id: number) {
-            return await productOptionApi.delete(id);
+            // return await productOptionApi.delete(id);
         }
     }
 })

@@ -18,16 +18,16 @@ export class BaseAdminApi extends BaseApi {
 
     async create(data: object) {
         const response = await this.axiosInstance.post(this.path, data);
-        return response.data.data;
+        return response.data;
     }
 
     async update(id: number, data: object) {
         const response = await this.axiosInstance.post(this.path + '/' + id, data);
-        return response.data.data;
+        return response.data;
     }
 
     async delete(id: number) {
         const response = await this.axiosInstance.delete(this.path + '/' + id);
-        return response.data.data;
+        return response.data;
     }
 }

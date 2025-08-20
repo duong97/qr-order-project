@@ -15,16 +15,18 @@ export const validate =
             } catch (err: any) {
                 if (err instanceof ZodError) {
                     return res.status(400).json({
-                        status: 'fail',
-                        message: 'Validation error',
+                        success: false,
+                        data: null,
                         errors: err.issues,
+                        message: "Validation error!"
                     });
                 }
 
                 return res.status(400).json({
-                    status: 'fail',
-                    message: 'Validation error',
-                    errors: err.message || "Unexpected error",
+                    success: false,
+                    data: null,
+                    message: err.message || "Unexpected error",
+                    errors: err.issues || [],
                 });
             }
         };

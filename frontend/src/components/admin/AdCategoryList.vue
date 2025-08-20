@@ -72,9 +72,9 @@ export default defineComponent({
                 confirmButtonText: "Xóa",
                 confirmButtonColor: "red",
                 cancelButtonText: "Hủy",
-                title: 'Xóa nhóm',
+                title: 'Xác nhận',
                 message:
-                    'Thao tác này không thể hoàn lại, bạn có chắc muốn xóa nhóm này?',
+                    'Thao tác này không thể hoàn lại, bạn có chắc muốn xóa?',
             })
                 .then(async () => {
                     // on confirm
@@ -100,9 +100,9 @@ export default defineComponent({
 
 <template>
     <div class="m-2">
-        <h2 class="subtitle is-7">Danh sách các nhóm món. Mỗi món sẽ thuộc 1 nhóm. Ví dụ món "Trà sữa" sẽ thuộc nhóm "Đồ uống"...</h2>
+        <h2 class="subtitle is-7">Gom nhóm món ăn theo loại (vd: Trái cây, Nước uống, Món chính, Tráng miệng, ...)</h2>
         <van-button type="primary" size="small" @click="showPopup = !showPopup">
-            Thêm nhóm
+            Thêm danh mục
         </van-button>
     </div>
     <van-list>
@@ -126,7 +126,7 @@ export default defineComponent({
         teleport="#admin-index-container"
         position="bottom"
     >
-        <van-nav-bar title="Thêm nhóm" />
+        <van-nav-bar title="Thêm danh mục" />
         <van-form @submit="createOrUpdate">
             <van-cell-group inset>
                 <van-field

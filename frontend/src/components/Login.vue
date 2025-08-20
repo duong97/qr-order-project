@@ -57,7 +57,7 @@ export default defineComponent({
 
 <template>
     <div class="m-3">
-        <h1 class="title is-5">Đăng nhập vào chức năng quản lý</h1>
+        <h1 class="title is-5">Administrator</h1>
         <van-form @submit="login()">
             <van-cell-group inset>
                 <van-field

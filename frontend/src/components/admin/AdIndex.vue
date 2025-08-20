@@ -58,18 +58,18 @@ export default defineComponent({
                 native-type="submit"
                 @click="logout"
             >
-                Đăng xuất
+                Đăng xuất ({{ authStore.user?.username }})
             </van-button>
         </div>
         <van-tabs animated>
-            <van-tab title="Nhóm" :key="1">
+            <van-tab title="Danh mục" :key="1">
                 <qrt-admin-category-list />
             </van-tab>
-            <van-tab title="Topping/Tùy chọn" :key="2">
-                <qrt-admin-product-option-list />
-            </van-tab>
-            <van-tab title="Món" :key="3">
+            <van-tab title="Món ăn" :key="2">
                 <qrt-admin-product-list />
+            </van-tab>
+            <van-tab title="Tùy chọn" :key="3">
+                <qrt-admin-product-option-list />
             </van-tab>
         </van-tabs>
     </div>

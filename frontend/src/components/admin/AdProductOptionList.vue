@@ -172,11 +172,10 @@ export default defineComponent({
 <template>
     <div class="m-2">
         <h2 class="subtitle is-7">
-            Danh sách các topping / tùy chọn của món.<br>
-            Vd món Trà đào cam sả sẽ có topping như thêm đào hoặc tùy chọn về Đá như đá chung hoặc đá riêng, tùy chọn về lượng đường như 50% hay 100%...
+          Các tuỳ chọn/biến thể gắn với món (vd: Size, Đường, Đá, Topping).
         </h2>
         <van-button type="primary" size="small" @click="showPopupCreate">
-            Thêm mới
+            Thêm tuỳ chọn
         </van-button>
     </div>
     <van-list>

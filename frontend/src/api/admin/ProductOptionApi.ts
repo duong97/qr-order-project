@@ -1,6 +1,6 @@
-import {BaseApi} from "@/api/BaseApi";
+import {BaseAdminApi} from "@/api/admin/BaseAdminApi";
 
-export class ProductOptionApi extends BaseApi{
+export class ProductOptionApi extends BaseAdminApi {
     constructor() {
         super('/public/options');
     }

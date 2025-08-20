@@ -46,14 +46,14 @@ export function errorHandler(
 
     if (err instanceof AuthError) {
         return res.status(err.statusCode).json({
-            status: 'error',
+            success: false,
             message: err.message,
         });
     }
 
     if (err instanceof ValidationError) {
         return res.status(err.statusCode).json({
-            status: 'error',
+            success: false,
             message: err.message || "Validation failed",
             errors: err.errors,
         });
@@ -61,7 +61,7 @@ export function errorHandler(
 
     // App error
     return res.status(statusCode).json({
-        status: 'error',
+        success: false,
         message: 'Internal Server Error',
     })
 }

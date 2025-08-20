@@ -11,6 +11,7 @@ model Category {
   id        Int     @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
+  createdBy   Int?
 
   // Relations
   products  Product[]  @relation("ProductCategories")
@@ -23,6 +24,7 @@ model Product {
   description String?
   thumbnail   String?
   createdAt   DateTime @default(now())
+  createdBy   Int?
 
   // Relations
   categories  Category[]  @relation("ProductCategories")

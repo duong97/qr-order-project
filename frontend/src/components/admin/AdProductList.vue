@@ -136,6 +136,7 @@ export default defineComponent({
             this.resetProduct();
         },
         async createOrUpdate() {
+          // @todo fix tạo món bị đổi title thành cập nhật
             if (!this.validate()) {
                 return;
             }
@@ -237,7 +238,7 @@ export default defineComponent({
 
 <template>
     <div class="m-2">
-        <h2 class="subtitle is-7">Danh sách các món ăn được phục vụ. Mỗi món ăn sẽ thuộc 1 nhóm.</h2>
+        <h2 class="subtitle is-7">Danh sách chi tiết từng món (vd: Dưa hấu, Nước mía, Phở bò)</h2>
         <van-button type="primary" size="small" @click="showPopupCreate">
             Thêm món
         </van-button>

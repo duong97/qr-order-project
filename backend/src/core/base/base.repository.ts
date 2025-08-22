@@ -26,6 +26,7 @@ export class BaseRepository<TModel> {
     }
 
     async update(id: number, data: any): Promise<any> {
+        console.log('data', data);
         // @ts-ignore
         return this.model.update({ where: { id }, data });
     }

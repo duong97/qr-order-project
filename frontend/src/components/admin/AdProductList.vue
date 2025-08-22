@@ -136,7 +136,6 @@ export default defineComponent({
             this.resetProduct();
         },
         async createOrUpdate() {
-          // @todo fix tạo món bị đổi title thành cập nhật
             if (!this.validate()) {
                 return;
             }
@@ -150,16 +149,16 @@ export default defineComponent({
             };
             if (this.file && Array.isArray(this.file) && this.file.length > 0) {
                 thumb = this.file[0];
-                console.log(thumb)
             }
 
             // Upload image -> update db
             // @todo Fix create product has no id
-            const productThumbName = StringHelper.getProductThumbName(this.newProduct.id?.toString() || StringHelper.generateRandomString(10));
-            const fileExt = StringHelper.getFileExtension(thumb.file.name);
-            const uploadResult = await this.uploadApi.upload(thumb.content, productThumbName + fileExt, thumb.file.type);
-            if (uploadResult.success && uploadResult.fileUrl) {
-                this.newProduct.thumbnail = uploadResult.fileUrl;
+            // const productThumbName = StringHelper.getProductThumbName(this.newProduct.id?.toString() || StringHelper.generateRandomString(10));
+            // const fileExt = StringHelper.getFileExtension(thumb.file.name);
+            // const uploadResult = await this.uploadApi.upload(thumb.content, productThumbName + fileExt, thumb.file.type);
+            // if (uploadResult.success && uploadResult.fileUrl) {
+            //     this.newProduct.thumbnail = uploadResult.fileUrl;
+                this.newProduct.thumbnail = '';
                 const result = await this.productStore.createOrUpdate({...toRaw(this.newProduct)});
                 this.loading = false;
 
@@ -171,9 +170,9 @@ export default defineComponent({
                 } else {
                     showNotify({ type: 'warning', message: result.message });
                 }
-            } else {
-                showNotify({ type: 'warning', message: uploadResult.error });
-            }
+            // } else {
+            //     showNotify({ type: 'warning', message: uploadResult.error });
+            // }
         },
         validate() {
             if (!this.newProduct.category) {
@@ -264,7 +263,7 @@ export default defineComponent({
         teleport="#admin-index-container"
         position="bottom"
     >
-        <van-nav-bar :title="newProduct.name ? 'Cập nhật thông tin món' : 'Thêm món'" />
+        <van-nav-bar :title="newProduct.id ? 'Cập nhật thông tin món' : 'Thêm món'" />
         <van-form @submit="createOrUpdate">
             <van-cell-group inset>
                 <van-field
@@ -275,7 +274,7 @@ export default defineComponent({
                 />
                 <van-field
                     type="number"
-                    v-model="newProduct.price"
+                    v-model.number="newProduct.price"
                     label="Đơn giá"
                     placeholder="50000"
                     :rules="[{ required: true, message: getRequireMessage }]"

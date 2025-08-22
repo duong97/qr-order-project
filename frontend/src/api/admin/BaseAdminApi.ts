@@ -22,7 +22,7 @@ export class BaseAdminApi extends BaseApi {
     }
 
     async update(id: number, data: object) {
-        const response = await this.axiosInstance.post(this.path + '/' + id, data);
+        const response = await this.axiosInstance.put(this.path + '/' + id, data);
         return response.data;
     }
 

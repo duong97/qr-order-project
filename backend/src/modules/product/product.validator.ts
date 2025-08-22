@@ -1,15 +1,12 @@
-import { z } from 'zod';
+import {z} from 'zod';
 import {BaseValidator} from "@/core/base/base.validator";
 
 const createAndUpdateValidator = z.object({
-    name: z
-        .string("Name must be a string")
-        .nonempty("Name is required")
-        .max(255, { message: 'name must be at most 255 characters' })
-    ,
-    price: z
-        .number("Price must be a number")
+    name: BaseValidator.mustBeString(true),
+    price: BaseValidator.mustBeNumber(true),
+    description: BaseValidator.mustBeString(),
 });
+
 export class ProductValidator extends BaseValidator {
     onCreate = createAndUpdateValidator
     onUpdate = createAndUpdateValidator

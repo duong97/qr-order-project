@@ -1,5 +1,7 @@
 import axios, {AxiosResponse} from 'axios';
 import config from '@/config';
+import router from "@/router";
+import {authHandler} from "@/handler/AuthHandler";
 
 const AxiosBase = axios.create({
     baseURL: config.cfConfig.apiUrl,
@@ -16,16 +18,23 @@ AxiosBase.interceptors.response.use(
     (error) => {
         const statusCode = error.response?.status ?? 500;
         const isValidationError = statusCode === 400;
+        const isAuthError = statusCode === 401;
         let firstErrorMsg = isValidationError ? error.response?.data?.errors?.[0]?.message ?? null : null;
         if (!firstErrorMsg) {
             firstErrorMsg = error.response?.data?.message || null;
         }
+
+        // Token hết hạn => login lại
+        if (error.response && isAuthError) {
+            authHandler.handleUnauthorized();
+        }
+
         return {
             data: {
                 data: [],
                 success: false,
                 message: firstErrorMsg || "Lỗi hệ thống"
-            },      // hoặc [] nếu bạn muốn dạng array
+            },
             status: statusCode,
             statusText: "error",
             headers: error.response?.headers ?? {},

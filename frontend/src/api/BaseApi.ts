@@ -12,6 +12,6 @@ export class BaseApi {
 
     async list() {
         const response = await this.axiosInstance.get(this.path);
-        return response.data.data;
+        return response?.data?.data;
     }
 }

@@ -123,7 +123,7 @@ export default defineComponent({
         },
         async loadCategoryList() {
             if (this.categoryStore.items.length === 0) {
-                await this.categoryStore.fetch();
+                await this.categoryStore.adminList();
             }
         },
         async loadProductOptionList() {

@@ -17,7 +17,7 @@ export const useAuthStore = defineStore('auth', {
 
             if (token) {
                 this.user = {
-                    id: loginData.user?.id,
+                    id: loginData.data.user?.id,
                     username,
                     token
                 };

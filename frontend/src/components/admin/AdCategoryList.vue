@@ -43,7 +43,7 @@ export default defineComponent({
     },
     methods: {
         loadCategoryList() {
-            this.categoryStore.fetch();
+            this.categoryStore.adminList();
         },
         async createOrUpdate() {
             this.loading = true;

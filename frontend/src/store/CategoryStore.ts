@@ -16,6 +16,9 @@ export const useCategoryStore = defineStore('category', {
         async fetch() {
             this.items = await publicApi.categories();
         },
+        async adminList() {
+            this.items = await adminCategoryApi.list();
+        },
         async createOrUpdate(category: Category) {
             if (category.id) {
                 return await adminCategoryApi.update(category.id, category);

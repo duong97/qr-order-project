@@ -1,6 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
 import config from '@/config';
-import router from "@/router";
 import {authHandler} from "@/handler/AuthHandler";
 
 const AxiosBase = axios.create({

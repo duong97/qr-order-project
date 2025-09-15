@@ -5,6 +5,7 @@ const createAndUpdateValidator = z.object({
     name: BaseValidator.mustBeString(true),
     price: BaseValidator.mustBeNumber(true),
     description: BaseValidator.mustBeString(),
+    categories: z.array(z.number()).optional(),
 });
 
 export class ProductValidator extends BaseValidator {

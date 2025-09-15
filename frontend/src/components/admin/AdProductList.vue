@@ -37,7 +37,7 @@ const emptyProduct = {
     price: 0,
     description: '',
     thumbnail: '',
-    category: undefined,
+    categories: [],
     options: []
 };
 
@@ -175,7 +175,7 @@ export default defineComponent({
             // }
         },
         validate() {
-            if (!this.newProduct.category) {
+            if (!this.newProduct.categories) {
                 showNotify({ type: 'warning', message: "Vui lòng chọn nhóm!" });
                 return false;
             }
@@ -285,20 +285,23 @@ export default defineComponent({
                     placeholder="Mô tả chi tiết về món ăn"
                     :rules="[{ required: true, message: getRequireMessage }]"
                 />
-                <van-field
-                    label="Nhóm"
-                    style="display: flex; align-items: center;"
-                    :error-message="newProduct.category ? '' : 'Vui lòng chọn nhóm'"
-                >
-                    <template #input>
-                        <van-dropdown-menu direction="up" style="width: 100%;">
-                            <van-dropdown-item
-                                v-model="newProduct.category"
-                                :options="categoryList"
-                            />
-                        </van-dropdown-menu>
-                    </template>
-                </van-field>
+              <van-field
+                  label="Danh mục"
+                  style="display: flex; align-items: center;"
+              >
+                <template #input>
+                  <van-checkbox-group shape="square" v-model="newProduct.categories">
+                    <van-checkbox
+                        v-for="category in categoryList"
+                        :name="category.value"
+                        :key="category.value"
+                        class="m-2"
+                    >
+                      {{ category.text }}
+                    </van-checkbox>
+                  </van-checkbox-group>
+                </template>
+              </van-field>
                 <van-field
                     label="Tùy chọn"
                     style="display: flex; align-items: center;"

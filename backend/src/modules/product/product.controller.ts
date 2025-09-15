@@ -29,4 +29,40 @@ export class ProductController extends BaseController<ProductService> {
             next(err);
         }
     };
+
+    store = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const bodyData = {...req.body};
+            bodyData.createdBy = req.currentUser?.id;
+            if (bodyData.category) {
+                bodyData.categories = {
+                    connect: { id: bodyData.category }
+                }
+            }
+            console.log('debug 2', bodyData);
+            const data = await (this.service as any).create(bodyData);
+            res.status(201).json({ success: true, data });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    update = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const id = +req.params.id;
+            const {name, price, description, categories} = req.body;
+            const dataCreate = {name, price, description, categories: {}};
+            if (categories?.length) {
+                dataCreate.categories = {
+                    connect: categories.map((category: number) => {
+                        return { id: category }
+                    }),
+                }
+            }
+            const data = await (this.service as any).update(id, dataCreate);
+            res.json({ success: true, data });
+        } catch (err) {
+            next(err);
+        }
+    };
 }

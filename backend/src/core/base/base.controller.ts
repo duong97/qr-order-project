@@ -33,6 +33,7 @@ export abstract class BaseController<TService> {
         try {
             const bodyData = req.body;
             bodyData.createdBy = req.currentUser?.id;
+            console.log('create data', bodyData)
             const data = await (this.service as any).create(bodyData);
             res.status(201).json({ success: true, data });
         } catch (err) {

@@ -16,12 +16,18 @@ export class PublicController {
                     select: {
                         id: true,
                     },
+                },
+                options: {
+                    select: {
+                        id: true,
+                    },
                 }
             };
             const data = await this.service.products(queryParams);
             const mappedData = data.map((product: any) => ({
                 ...product,
                 categories: product.categories?.map((category: any) => category.id),
+                options: product.options?.map((option: any) => option.id),
             }));
             res.json({success: true, data: mappedData});
         } catch (err) {

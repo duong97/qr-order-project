@@ -28,7 +28,7 @@ const emptyOptionItem = {
 const emptyProductOption = {
     id: undefined,
     name: '',
-    multiple: 0,
+    multiple: false,
     items: [
         { ...emptyOptionItem }
     ],
@@ -217,8 +217,8 @@ export default defineComponent({
                             direction="horizontal"
                             @change="reloadDefaultCheckedOption(0)"
                         >
-                            <van-radio :name="0">Chọn 1</van-radio>
-                            <van-radio :name="1">Chọn nhiều</van-radio>
+                            <van-radio :name="false">Chọn 1</van-radio>
+                            <van-radio :name="true">Chọn nhiều</van-radio>
                         </van-radio-group>
                     </template>
                 </van-field>

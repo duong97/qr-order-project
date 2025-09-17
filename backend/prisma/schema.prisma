@@ -28,6 +28,19 @@ model Product {
 
   // Relations
   categories  Category[]  @relation("ProductCategories")
+  options     Option[] @relation("ProductOptions")
+}
+
+model Option {
+  id          Int @id @default(autoincrement())
+  name        String
+  multiple    Boolean @default(false)
+  items       Json?
+  createdAt   DateTime @default(now())
+  createdBy   Int?
+
+  // Relations
+  products    Product[] @relation("ProductOptions")
 }
 
 model User {

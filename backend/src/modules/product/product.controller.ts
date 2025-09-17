@@ -17,12 +17,18 @@ export class ProductController extends BaseController<ProductService> {
                     select: {
                         id: true,
                     },
+                },
+                options: {
+                    select: {
+                        id: true,
+                    },
                 }
             };
             const data = await (this.service as any).getAll(queryParams);
-            const mappedData = data.map((product: { categories: any[]; }) => ({
+            const mappedData = data.map((product: { categories: any[]; options: any[]; }) => ({
                 ...product,
                 categories: product.categories.map((category) => category.id),
+                options: product.options.map((option) => option.id),
             }));
             res.json({success: true, data: mappedData});
         } catch (err) {
@@ -32,12 +38,19 @@ export class ProductController extends BaseController<ProductService> {
 
     store = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const {name, price, description, categories} = req.body;
-            const dataCreate = {name, price, description, categories: {}, createdBy: req.currentUser?.id};
+            const {name, price, description, categories, options} = req.body;
+            const dataCreate = {name, price, description, categories: {}, options: {}, createdBy: req.currentUser?.id};
             if (categories?.length) {
                 dataCreate.categories = {
                     connect: categories.map((category: number) => {
                         return { id: category }
+                    }),
+                }
+            }
+            if (options?.length) {
+                dataCreate.options = {
+                    connect: options.map((option: number) => {
+                        return { id: option }
                     }),
                 }
             }
@@ -51,16 +64,24 @@ export class ProductController extends BaseController<ProductService> {
     update = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const id = +req.params.id;
-            const {name, price, description, categories} = req.body;
-            const dataCreate = {name, price, description, categories: {}};
+            const {name, price, description, categories, options} = req.body;
+            const dataUpdate = {name, price, description, categories: {}, options: {}};
             if (categories?.length) {
-                dataCreate.categories = {
+                dataUpdate.categories = {
                     connect: categories.map((category: number) => {
                         return { id: category }
                     }),
                 }
             }
-            const data = await (this.service as any).update(id, dataCreate);
+            if (options?.length) {
+                dataUpdate.options = {
+                    connect: options.map((option: number) => {
+                        return { id: option }
+                    }),
+                }
+            }
+            console.log('dataUpdate', dataUpdate);
+            const data = await (this.service as any).update(id, dataUpdate);
             res.json({ success: true, data });
         } catch (err) {
             next(err);

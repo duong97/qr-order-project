@@ -7,6 +7,8 @@ import {UserValidator} from "@/modules/user/user.validator";
 import {CategoryController} from '@/modules/category/category.controller';
 import {ProductController} from "@/modules/product/product.controller";
 import {UserController} from "@/modules/user/user.controller";
+import {OptionController} from "@/modules/option/option.controller";
+import {OptionValidator} from "@/modules/option/option.validator";
 
 const adminRouter = Router();
 adminRouter.use(authMiddleware);
@@ -15,6 +17,7 @@ const routePrefix = '/admin';
 const routes = [
     {path: '/categories', controller: new CategoryController(), validator: new CategoryValidator()},
     {path: '/products', controller: new ProductController(), validator: new ProductValidator()},
+    {path: '/options', controller: new OptionController(), validator: new OptionValidator()},
     {path: '/users', controller: new UserController(), validator: new UserValidator()},
 ];
 

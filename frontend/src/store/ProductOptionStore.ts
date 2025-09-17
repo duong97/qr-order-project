@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import {ProductOptionApi} from "@/api/admin/ProductOptionApi";
+import {OptionApi} from "@/api/admin/OptionApi";
 import ProductOption from "@/interface/ProductOption";
 
-const productOptionApi = new ProductOptionApi();
+const adminOptionApi = new OptionApi();
 
 export const useProductOptionStore = defineStore('productOption', {
     state: () => {
@@ -12,17 +12,17 @@ export const useProductOptionStore = defineStore('productOption', {
     },
     actions: {
         async fetch() {
-            this.items = await productOptionApi.list();
+            this.items = await adminOptionApi.list();
         },
         async createOrUpdate(productOption: ProductOption) {
             if (productOption.id) {
-                return await productOptionApi.update(productOption.id, productOption);
+                return await adminOptionApi.update(productOption.id, productOption);
             } else {
-                return await productOptionApi.create(productOption);
+                return await adminOptionApi.create(productOption);
             }
         },
         async delete(id: number) {
-            return await productOptionApi.delete(id);
+            return await adminOptionApi.delete(id);
         }
     }
 })

@@ -32,15 +32,16 @@ export class ProductController extends BaseController<ProductService> {
 
     store = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const bodyData = {...req.body};
-            bodyData.createdBy = req.currentUser?.id;
-            if (bodyData.category) {
-                bodyData.categories = {
-                    connect: { id: bodyData.category }
+            const {name, price, description, categories} = req.body;
+            const dataCreate = {name, price, description, categories: {}, createdBy: req.currentUser?.id};
+            if (categories?.length) {
+                dataCreate.categories = {
+                    connect: categories.map((category: number) => {
+                        return { id: category }
+                    }),
                 }
             }
-            console.log('debug 2', bodyData);
-            const data = await (this.service as any).create(bodyData);
+            const data = await (this.service as any).create(dataCreate);
             res.status(201).json({ success: true, data });
         } catch (err) {
             next(err);

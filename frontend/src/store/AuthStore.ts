@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { AuthApi } from "@/api/AuthApi";
 import CurrentUser from "@/interface/CurrentUser";
 import {StorageSerializers, useStorage} from "@vueuse/core";
+import socket from "@/plugin/socket";
+import {watch} from "vue";
 
 const authApi = new AuthApi();
 
@@ -21,6 +23,8 @@ export const useAuthStore = defineStore('auth', {
                     username,
                     token
                 };
+                socket.auth = {token};
+                console.log('set socket auth token', token);
                 return true;
             }
             return false;
@@ -28,6 +32,8 @@ export const useAuthStore = defineStore('auth', {
 
         logout() {
             this.user = null;
+            socket.auth = {};
+            console.log('delete socket auth token');
             return true;
         },
 
@@ -36,3 +42,18 @@ export const useAuthStore = defineStore('auth', {
         },
     }
 });
+
+// Khi thay đổi token thì reload lại socket auth
+export function initAuthStoreWatcher(authStore: ReturnType<typeof useAuthStore>) {
+    watch(
+        () => authStore.user?.token,
+        (token) => {
+            if (token) {
+                socket.auth = { token };
+            } else {
+                socket.auth = {};
+            }
+        },
+        { immediate: true } // chạy luôn 1 lần khi app start
+    );
+}

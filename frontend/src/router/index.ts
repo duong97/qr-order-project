@@ -3,6 +3,7 @@ import Home from "@/components/Home.vue";
 import Checkout from "@/components/Checkout.vue";
 import Login from "@/components/Login.vue";
 import AdminIndex from "@/components/admin/AdIndex.vue";
+import AdminOrder from "@/components/admin/AdOrder.vue";
 import PageNotFound from "@/components/PageNotFound.vue";
 import { useTableStore } from '@/store/TableStore';
 import {useAuthStore} from "@/store/AuthStore";
@@ -46,6 +47,11 @@ const router = createRouter({
             path: '/admin',
             name: 'admin',
             component: AdminIndex,
+        },
+        {
+            path: '/admin/order',
+            name: 'admin-order',
+            component: AdminOrder,
         },
         { path: '/:pathMatch(.*)*', component: PageNotFound }
     ]

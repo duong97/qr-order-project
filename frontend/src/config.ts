@@ -20,6 +20,7 @@ export default {
         // apiUrl: "https://qrt.nvduong1211.workers.dev/api",
         // apiUrl: "http://localhost:8787/api", // cloudflare local
         apiUrl: "http://localhost:5001/api",
+        socketUrl: "http://localhost:5001",
         apiKey: 'eccfd07c-6ecc-4882-8e4e-f8ac8639a82d',
     },
     uploadImageUrl: 'https://script.google.com/macros/s/AKfycbx_4Tq8CjD2A3ndRRBbWMMsyHgqSbiF-5Whi0I_Qajc8s_uG30fe8bhnK522UOLOywf/exec',

@@ -14,6 +14,7 @@ import router from '@/router';
 import { Locale } from 'vant';
 import enUS from 'vant/es/locale/lang/en-US';
 import {authHandler} from "@/handler/AuthHandler";
+import {initAuthStoreWatcher, useAuthStore} from "@/store/AuthStore";
 
 const app = createApp(App)
 app.config.globalProperties.$filters = {
@@ -25,5 +26,9 @@ app.use(pinia)
 app.use(router)
 authHandler.init(router)
 Locale.use('en-US', enUS);
+
+// Phải đặt store bên dưới pinia
+const authStore = useAuthStore();
+initAuthStoreWatcher(authStore);
 
 app.mount('#app')

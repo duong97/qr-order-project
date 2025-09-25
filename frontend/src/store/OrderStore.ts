@@ -19,9 +19,6 @@ export const useOrderStore = defineStore("order", {
                 socket.connect();
                 this.connected = true;
 
-                // Join vào room user
-                socket.emit("order:join");
-
                 // Lắng nghe sự kiện
                 socket.on("order:created", (data: Order) => {
                     this.orders.push(data);

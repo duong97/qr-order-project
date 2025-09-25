@@ -1,6 +1,8 @@
 import {prisma} from "@/lib/prisma";
 import {Prisma} from "@prisma/client";
 import {OrderInput} from "@/modules/order/order.validator";
+import {getIO} from "@/lib/socket";
+import {SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
 
 export class PublicService {
     protected product: Prisma.ProductDelegate;
@@ -22,7 +24,12 @@ export class PublicService {
     }
 
     async submitOrder(data: OrderInput) {
-        console.log('order received', data)
+        // @todo xử lý tổ chức socket
+        // - to room: chỉ để quản lý, client không biết cụ thể room nào
+        // - xem xét đặt tên event dạng admin-order-12
+        getIO()
+            .to(SOCKET_ROOMS.ADMIN)
+            .emit(SOCKET_EVENTS.NEW_ORDER, data);
         return data;
     }
 }

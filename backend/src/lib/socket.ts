@@ -24,3 +24,10 @@ export const initSocket = (httpServer: any) => {
 
     return io;
 };
+
+export const getIO = (): Server => {
+    if (!io) {
+        throw new Error("⚠️ Socket.IO chưa được khởi tạo");
+    }
+    return io;
+};

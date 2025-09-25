@@ -1,5 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {PublicService} from "@/modules/public/public.service";
+import {OrderInput} from "@/modules/order/order.validator";
+import {TypedRequest} from "@/core/types/request";
 
 export class PublicController {
     protected service: PublicService;
@@ -38,6 +40,15 @@ export class PublicController {
     categories = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const data = await this.service.categories({});
+            res.json({success: true, data});
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    submitOrder = async (req: TypedRequest<OrderInput>, res: Response, next: NextFunction) => {
+        try {
+            const data = await this.service.submitOrder(req.body);
             res.json({success: true, data});
         } catch (err) {
             next(err);

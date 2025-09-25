@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import socket from "@/plugin/socket";
-import {useAuthStore} from "@/store/AuthStore";
 
 interface Order {
     id: string;

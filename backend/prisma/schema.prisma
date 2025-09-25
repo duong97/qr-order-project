@@ -64,4 +64,47 @@ model Role {
   users       User[] @relation("UserRoles")
 }
 
+model Table {
+  id          Int     @id @default(autoincrement())
+  code        String
+  name        String
+  createdAt   DateTime @default(now())
+  createdBy   Int?
+
+  // Relations
+  orders    Order[]
+}
+
+model Order {
+  id          Int     @id @default(autoincrement())
+  code        String
+  tableId     Int
+  totalAmount Int
+  note        String
+  orderStatus Int
+  paymentStatus   Int
+  createdAt   DateTime @default(now())
+  createdBy   Int?
+
+  // Relations
+  details     OrderDetail[]
+  table       Table @relation(fields: [tableId], references: [id])
+}
+
+model OrderDetail {
+  id          Int     @id @default(autoincrement())
+  orderId     Int
+  productId   Int
+  productOptions  Json
+  qty         Int
+  price       Int
+  totalAmount Int
+  note        String
+  createdAt   DateTime @default(now())
+  createdBy   Int?
+
+  // Relations
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+
 // @todo add order funtion

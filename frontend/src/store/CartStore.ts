@@ -7,6 +7,10 @@ import config from "@/config";
 import {initializeApp} from "firebase/app";
 import {getDatabase, push, ref as firebaseRef} from "firebase/database";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {PublicApi} from "@/api/public/PublicApi";
+import OrderSubmit from "@/interface/OrderSubmit";
+
+const publicApi = new PublicApi();
 
 export const useCartStore = defineStore('cart', () => {
     const items = ref<CartItem[]>([]);
@@ -103,38 +107,24 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     const submitOrder = async (tableName: string, customerName: string) => {
-        return false;
-        const firebaseConfig = config.firebaseConfig;
-        const app = initializeApp(firebaseConfig);
-
         if (items.value.length === 0) {
             return false;
         }
 
-        // Initialize Firebase Authentication and get a reference to the service
-        const auth = getAuth(app);
-        return await signInWithEmailAndPassword(auth, config.firebaseAuth.email, config.firebaseAuth.password)
-            .then(async () => {
-                // Initialize Realtime Database and get a reference to the service
-                const database = getDatabase(app);
-                const orderPath = ['orders', tableName].join('/')
-                const orderRefs = firebaseRef(database, orderPath);
+        // Submit order
+        const order = {
+            tableName,
+            customerName: customerName,
+            items: items.value
+        } as OrderSubmit;
 
-                // Save order
-                const order = {
-                    customerName: customerName || 'Anonymous',
-                    items: items.value
-                }
-                await push(orderRefs, order).then(() => {
-                    clearCart();
-                });
-                return true;
-            })
-            .catch(() => {
-                // console.error("Error signing in: ", error);
-                console.error("Error in prepare order!");
-                return false;
-            });
+        const orderSubmitted = await publicApi.submitOrder(order);
+        if (orderSubmitted?.success) {
+            // clearCart();
+            return true;
+        }
+
+        return false;
     }
 
     return {

@@ -37,4 +37,13 @@ export class UserController extends BaseController<UserService> {
             }
         });
     };
+
+    currentUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+        res.json({
+            success: true,
+            data: {
+                message: 'Authenticated successfully',
+            }
+        });
+    };
 }

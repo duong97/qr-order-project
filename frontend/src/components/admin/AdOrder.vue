@@ -4,6 +4,9 @@ import {Button, Tabs, Tab} from "vant";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/store/AuthStore";
 import {useOrderStore} from "@/store/OrderStore";
+import {UserApi} from "@/api/admin/UserApi";
+
+const userApi = new UserApi();
 
 export default defineComponent({
     name: "qrt-admin-order",
@@ -22,6 +25,9 @@ export default defineComponent({
     //     orderStore.connect();
     // },
     setup() {
+        // Check user login
+        userApi.currentUserInfo();
+
         const authStore = useAuthStore();
         const router = useRouter();
         const orderStore = useOrderStore();
@@ -29,6 +35,7 @@ export default defineComponent({
 
         return {
             authStore,
+            orderStore,
             router,
         }
     },
@@ -40,7 +47,9 @@ export default defineComponent({
 
 <template>
     <div id="admin-order-container">
-      Order ne
+      Connection status: {{ orderStore.connected ? "Connected" : "Connecting..." }}
+        <br>
+        {{ orderStore.orders }}
     </div>
 </template>
 

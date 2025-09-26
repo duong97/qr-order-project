@@ -14,11 +14,13 @@ const adminRouter = Router();
 adminRouter.use(authMiddleware);
 const routePrefix = '/admin';
 
+const userController = new UserController();
+
 const routes = [
     {path: '/categories', controller: new CategoryController(), validator: new CategoryValidator()},
     {path: '/products', controller: new ProductController(), validator: new ProductValidator()},
     {path: '/options', controller: new OptionController(), validator: new OptionValidator()},
-    {path: '/users', controller: new UserController(), validator: new UserValidator()},
+    {path: '/users', controller: userController, validator: new UserValidator()},
 ];
 
 for (const route of routes) {
@@ -32,5 +34,8 @@ for (const route of routes) {
     adminRouter.put(basePath + '/:id', [validate(validator.onUpdate)], controller.update?.bind(controller));
     adminRouter.delete(basePath + '/:id', [validate(validator.onDelete)], controller.destroy?.bind(controller));
 }
+
+// Another path
+adminRouter.get('/admin/users/current', userController.currentUserInfo?.bind(userController));
 
 export default adminRouter;

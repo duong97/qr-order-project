@@ -1,6 +1,6 @@
-import {Server, Socket} from "socket.io";
+import {Server} from "socket.io";
 import {registerOrderSocket} from "@/modules/order/order.socket";
-import {socketAuthMiddleware} from "@/core/middleware/socketAuth";
+import {AuthenticatedSocket, socketAuthMiddleware} from "@/core/middleware/socketAuth";
 
 let io: Server;
 
@@ -12,8 +12,8 @@ export const initSocket = (httpServer: any) => {
     // Authentication
     io.use(socketAuthMiddleware);
 
-    io.on("connection", (socket: Socket) => {
-        console.log(`⚡ Client connected: ${socket.id}`);
+    io.on("connection", (socket: AuthenticatedSocket) => {
+        console.log(`⚡ Client connected: user ${socket.user?.id} - ${socket.user?.username}`);
 
         registerOrderSocket(io, socket);
 

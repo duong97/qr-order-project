@@ -1,21 +1,15 @@
-import { Server, Socket } from "socket.io";
-import {SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
+import { Server } from "socket.io";
+import {SOCKET_ROOMS} from "@/core/const/default";
+import {AuthenticatedSocket} from "@/core/middleware/socketAuth";
 
 const roomOrder = SOCKET_ROOMS.ORDER;
-const eventOrderNew = SOCKET_EVENTS.ORDER_NEW;
 
-export const registerOrderSocket = (io: Server, socket: Socket) => {
+export const registerOrderSocket = (io: Server, socket: AuthenticatedSocket) => {
     // Join room order on demand
-    socket.on(["join", roomOrder].join(':'), () => {
+    const joinOrder = ["join", roomOrder].join(':');
+    console.log('Handling order socket...');
+    socket.on(joinOrder, () => {
+        console.log(`Client joined room ${roomOrder}`);
         socket.join(roomOrder);
-        console.log(`User ${socket.id} joined room ${roomOrder}`);
-    });
-
-    // Ví dụ: admin join vào room riêng
-    socket.on(eventOrderNew, (data) => {
-        console.log("New order received: ", data);
-
-        // Send event to all clients
-        io.to(roomOrder).emit(eventOrderNew, data);
     });
 };

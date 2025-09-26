@@ -8,6 +8,7 @@ interface Order {
 }
 
 // Event name
+const EVENT_SOCKET_CONNECTED = "connect";
 const EVENT_JOIN_ORDER = "join:order";
 const EVENT_ORDER_NEW = "order:new";
 
@@ -21,10 +22,14 @@ export const useOrderStore = defineStore("order", {
         connect() {
             if (!socket.connected) {
                 socket.connect();
-                this.connected = true;
 
                 // join room order
                 socket.emit(EVENT_JOIN_ORDER);
+
+                // Sau khi kết nối thành công
+                socket.on(EVENT_SOCKET_CONNECTED, () => {
+                    this.connected = true;
+                });
 
                 // check has a new order
                 socket.on(EVENT_ORDER_NEW, (data: Order) => {

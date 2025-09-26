@@ -61,7 +61,7 @@ router.beforeEach((to, from) => {
     const authStore = useAuthStore();
     const tableStore = useTableStore();
 
-    if (!authStore.isLoggedIn() && to.name === "admin") {
+    if (!authStore.isLoggedIn() && to.path.startsWith("/admin")) {
         return { name: "login" };
     }
     if (authStore.isLoggedIn() && to.name === "login") {

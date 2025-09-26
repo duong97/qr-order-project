@@ -21,6 +21,6 @@ export class PublicApi extends BaseApi{
     async submitOrder(order: OrderSubmit) {
         this.path = '/public/orders';
         const response = await this.axiosInstance.post(this.path, order);
-        return response?.data?.data;
+        return response?.data;
     }
 }

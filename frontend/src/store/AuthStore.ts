@@ -24,19 +24,15 @@ export const useAuthStore = defineStore('auth', {
                     token
                 };
                 socket.auth = {token};
-                console.log('set socket auth token', token);
                 return true;
             }
             return false;
         },
-
         logout() {
             this.user = null;
             socket.auth = {};
-            console.log('delete socket auth token');
             return true;
         },
-
         isLoggedIn() {
             return !!this.user?.token;
         },

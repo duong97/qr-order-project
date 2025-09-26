@@ -1,12 +1,11 @@
 // Socket room name
 export const SOCKET_ROOMS = {
-    ADMIN: "admin",
-    CLIENT: "client",
+    ORDER: "order",
 } as const;
 export type SocketRoom = typeof SOCKET_ROOMS[keyof typeof SOCKET_ROOMS];
 
 // Socket room name
 export const SOCKET_EVENTS = {
-    NEW_ORDER: "new-order",
+    ORDER_NEW: "order:new",
 } as const;
 export type SocketEvent = typeof SOCKET_EVENTS[keyof typeof SOCKET_EVENTS];

@@ -25,11 +25,13 @@ export class PublicService {
 
     async submitOrder(data: OrderInput) {
         // @todo xử lý tổ chức socket
+        // -- 1 user khi kết nối socket tới server thì dựa vào role để join room
+        // -- khi emit sự kiện thì user join room đó mới nhận được
         // - to room: chỉ để quản lý, client không biết cụ thể room nào
         // - xem xét đặt tên event dạng admin-order-12
         getIO()
-            .to(SOCKET_ROOMS.ADMIN)
-            .emit(SOCKET_EVENTS.NEW_ORDER, data);
+            .to(SOCKET_ROOMS.ORDER)
+            .emit(SOCKET_EVENTS.ORDER_NEW, data);
         return data;
     }
 }

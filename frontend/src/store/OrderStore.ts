@@ -7,6 +7,10 @@ interface Order {
     total: number;
 }
 
+// Event name
+const EVENT_JOIN_ORDER = "join:order";
+const EVENT_ORDER_NEW = "order:new";
+
 export const useOrderStore = defineStore("order", {
     state: () => ({
         orders: [] as Order[],
@@ -19,8 +23,11 @@ export const useOrderStore = defineStore("order", {
                 socket.connect();
                 this.connected = true;
 
-                // Lắng nghe sự kiện
-                socket.on("order:created", (data: Order) => {
+                // join room order
+                socket.emit(EVENT_JOIN_ORDER);
+
+                // check has a new order
+                socket.on(EVENT_ORDER_NEW, (data: Order) => {
                     this.orders.push(data);
                 });
             }
@@ -28,14 +35,10 @@ export const useOrderStore = defineStore("order", {
 
         disconnect() {
             if (this.connected) {
-                socket.off("order:created");
+                socket.off(EVENT_ORDER_NEW);
                 socket.disconnect();
                 this.connected = false;
             }
-        },
-
-        createOrder(payload: { userId: string; items: string[] }) {
-            socket.emit("order:create", payload);
         },
     },
 });

@@ -3,6 +3,7 @@ import {Prisma} from "@prisma/client";
 import {OrderInput} from "@/modules/order/order.validator";
 import {getIO} from "@/lib/socket";
 import {SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
+import {OrderService} from "@/modules/order/order.service";
 
 export class PublicService {
     protected product: Prisma.ProductDelegate;
@@ -24,9 +25,11 @@ export class PublicService {
     }
 
     async submitOrder(data: OrderInput) {
+        const orderService = new OrderService();
+        const orderCreated = orderService.createOrder(data);
         getIO()
             .to(SOCKET_ROOMS.ORDER)
-            .emit(SOCKET_EVENTS.ORDER_NEW, data);
-        return data;
+            .emit(SOCKET_EVENTS.ORDER_NEW, orderCreated);
+        return orderCreated;
     }
 }

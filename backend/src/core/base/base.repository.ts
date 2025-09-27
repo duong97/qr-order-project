@@ -20,9 +20,10 @@ export class BaseRepository<TModel> {
         return this.model.findUnique({ where: { id } });
     }
 
-    async create(data: any): Promise<any> {
+    async create(data: any, include: any = {}): Promise<any> {
+        console.log('data', JSON.stringify({ data, include }));
         // @ts-ignore
-        return this.model.create({ data });
+        return this.model.create({ data, include });
     }
 
     async update(id: number, data: any): Promise<any> {

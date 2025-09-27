@@ -19,6 +19,7 @@ const OrderProductSchema = z.object({
 // Đơn hàng
 export const OrderSchema = z.object({
     tableName: BaseValidator.mustBeString(),
+    tableId: BaseValidator.mustBeNumber(),
     customerName: BaseValidator.mustBeString(),
     note: BaseValidator.mustBeString(),
     items: z.array(OrderProductSchema).optional(),

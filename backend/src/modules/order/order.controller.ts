@@ -1,11 +1,10 @@
 import {BaseController} from '@/core/base/base.controller';
 import {OrderService} from './order.service';
-import {OrderRepository} from './order.repository';
 import {NextFunction, Request, Response} from "express";
 
 export class OrderController extends BaseController<OrderService> {
     constructor() {
-        super(new OrderService(new OrderRepository()));
+        super(new OrderService());
     }
 
     store = async (req: Request, res: Response, next: NextFunction) => {

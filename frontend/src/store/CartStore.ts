@@ -3,10 +3,6 @@ import CartItem from "@/interface/CartItem";
 import {ref, watch} from "vue";
 import CartItemVariant from "@/interface/CartItemVariant";
 import ProductOption from "@/interface/ProductOption";
-import config from "@/config";
-import {initializeApp} from "firebase/app";
-import {getDatabase, push, ref as firebaseRef} from "firebase/database";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {PublicApi} from "@/api/public/PublicApi";
 import OrderSubmit from "@/interface/OrderSubmit";
 

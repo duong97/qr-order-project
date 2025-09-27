@@ -97,20 +97,6 @@ export default defineComponent({
                 return {text: e.name, value: e.id}
             });
         },
-        isValidThumbnail(): boolean {
-            if (!this.newProduct.thumbnail) {
-                return true;
-            }
-
-            try {
-                const url = new URL(this.newProduct.thumbnail);
-                console.log(url)
-
-                return true;
-            } catch (_) {
-                return false;
-            }
-        },
     },
     mounted() {
         this.loadProductList();
@@ -140,16 +126,16 @@ export default defineComponent({
                 return;
             }
             this.loading = true;
-            let thumb = {
-                content: '',
-                file: {
-                    name: '',
-                    type: '',
-                }
-            };
-            if (this.file && Array.isArray(this.file) && this.file.length > 0) {
-                thumb = this.file[0];
-            }
+            // let thumb = {
+            //     content: '',
+            //     file: {
+            //         name: '',
+            //         type: '',
+            //     }
+            // };
+            // if (this.file && Array.isArray(this.file) && this.file.length > 0) {
+            //     thumb = this.file[0];
+            // }
 
             // Upload image -> update db
             // @todo Fix create product has no id

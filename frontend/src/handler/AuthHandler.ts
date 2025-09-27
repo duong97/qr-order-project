@@ -1,6 +1,5 @@
 import {useAuthStore} from "@/store/AuthStore";
 import type { Router } from "vue-router";
-import {showNotify} from "vant";
 
 class AuthHandler {
     private router: Router | null = null;

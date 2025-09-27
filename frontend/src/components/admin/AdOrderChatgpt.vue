@@ -4,12 +4,11 @@ import {
     Button,
     Tabs,
     Tab,
+    Card,
     Cell,
     CellGroup,
     Divider,
     Empty,
-    Tag,
-    NavBar,
 } from "vant";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/store/AuthStore";
@@ -24,12 +23,11 @@ export default defineComponent({
         [Button.name]: Button,
         [Tabs.name]: Tabs,
         [Tab.name]: Tab,
+        [Card.name]: Card,
         [Cell.name]: Cell,
         [CellGroup.name]: CellGroup,
         [Divider.name]: Divider,
         [Empty.name]: Empty,
-        [Tag.name]: Tag,
-        [NavBar.name]: NavBar,
     },
     setup() {
         // Check user login
@@ -58,48 +56,68 @@ export default defineComponent({
 
 <template>
     <div id="order-list" class="p-2">
-<!--        show connecting nếu đang kết nối với socket-->
-        <div class="has-text-centered" v-if="!orderStore.connected">
-            <span class="tag is-warning">Connecting...</span>
+        <div class="mb-2">
+            Connection status:
+            <b>{{ orderStore.connected ? "Connected" : "Connecting..." }}</b>
         </div>
 
-<!--        Title-->
-        <h4 class="title has-text-centered">Quản lý order</h4>
+        <!-- Nếu chưa có order -->
+        <van-empty
+            v-if="!orderStore.orders.length"
+            description="Chưa có đơn hàng nào"
+        />
 
-<!--        Empty component-->
-        <van-empty v-if="!orderStore.orders.length" description="Chưa có đơn hàng nào"/>
-
-<!--        Show danh sách order-->
+        <!-- Danh sách order -->
         <div v-else>
-            <div v-for="(order, orderIndex) in orderStore.orders" :key="orderIndex" class="mb-2">
-                <van-cell-group>
+            <div
+                v-for="(order, orderIndex) in orderStore.orders"
+                :key="orderIndex"
+                class="mb-4"
+            >
+                <van-card
+                    :title="`Bàn: ${order.tableName}`"
+                    :desc="`Khách: ${order.customerName}`"
+                    thumb="https://img.yzcdn.cn/vant/ipad.jpeg"
+                />
+
+                <van-cell-group inset>
                     <van-cell
-                        v-for="(item, itemIndex) in (order as any).items || []"
+                        v-for="(item, itemIndex) in order.items"
                         :key="itemIndex"
+                        :title="`Món #${item.id}`"
                     >
-                        <template #title>
-                            <van-tag plain size="large" type="primary" class="mr-2">{{ order.tableName || 'Table' }}</van-tag>
-                            <b class="is-size-6">{{ `Món #${item.id}` }}</b>
-                        </template>
                         <template #label>
-                            <div v-for="variant in item.variants || []" :key="variant.id" class="mb-1">
+                            <div
+                                v-for="variant in item.variants"
+                                :key="variant.id"
+                                class="mb-1"
+                            >
                                 <div class="flex justify-between">
-                                    <span>
-                                    SL: {{ variant.qty }} • Giá: {{ formatCurrency(variant.price) }}
-                                    </span>
+                  <span>
+                    SL: {{ variant.qty }} • Giá:
+                    {{ formatCurrency(variant.price) }}
+                  </span>
                                     <span v-if="variant.note">📝 {{ variant.note }}</span>
                                 </div>
 
-                                <div v-if="variant.itemOptions && variant.itemOptions.length"
-                                     class="text-xs text-gray-500 ml-2">
+                                <!-- Hiển thị options -->
+                                <div
+                                    v-if="variant.itemOptions.length"
+                                    class="text-xs text-gray-500 ml-2"
+                                >
                                     <div v-for="opt in variant.itemOptions" :key="opt.id">
                                         {{ opt.name }}:
-                                        <span v-for="optItem in opt.items" :key="optItem.id">
-                                            <span v-if="optItem.id === opt.selected">
-                                                {{ optItem.name }}
-                                            <span v-if="optItem.price > 0"> (+{{ formatCurrency(optItem.price) }}) </span>
-                                          </span>
-                                        </span>
+                                        <span
+                                            v-for="optItem in opt.items"
+                                            :key="optItem.id"
+                                        >
+                      <span v-if="optItem.id === opt.selected">
+                        {{ optItem.name }}
+                        <span v-if="optItem.price > 0">
+                          (+{{ formatCurrency(optItem.price) }})
+                        </span>
+                      </span>
+                    </span>
                                     </div>
                                 </div>
 
@@ -141,12 +159,5 @@ export default defineComponent({
 
 .text-gray-500 {
     color: #999;
-}
-
-.table-title {
-    padding: 4px 8px;
-    background: #f7f8fa;
-    border-radius: 6px;
-    margin-bottom: 4px;
 }
 </style>

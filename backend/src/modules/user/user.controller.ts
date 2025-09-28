@@ -1,6 +1,5 @@
 import {BaseController} from '@/core/base/base.controller';
 import {UserService} from './user.service';
-import {UserRepository} from './user.repository';
 import {NextFunction, Request, Response} from "express";
 import {AuthError} from "@/core/middleware/errorHandler";
 import bcrypt from 'bcrypt';
@@ -8,7 +7,7 @@ import jwt from 'jsonwebtoken';
 
 export class UserController extends BaseController<UserService> {
     constructor() {
-        super(new UserService(new UserRepository()));
+        super(new UserService());
     }
 
     login = async (req: Request, res: Response, next: NextFunction) => {

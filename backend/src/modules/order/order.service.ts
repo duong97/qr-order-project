@@ -1,6 +1,5 @@
 import {BaseService} from '@/core/base/base.service';
 import {OrderRepository} from './order.repository';
-import {ValidationError} from "@/core/middleware/errorHandler";
 import {OrderInput} from "@/modules/order/order.validator";
 
 export class OrderService extends BaseService<OrderRepository> {

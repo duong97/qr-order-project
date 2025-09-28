@@ -7,7 +7,7 @@ export class UserApi extends BaseAdminApi {
     }
 
     async currentUserInfo() {
-        const response = await AxiosBase.post('/admin/users/current');
+        const response = await AxiosBase.get('/admin/users/current');
         return response.data;
     }
 }

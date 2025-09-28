@@ -7,6 +7,19 @@ export class OrderController extends BaseController<OrderService> {
         super(new OrderService());
     }
 
+    index = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const queryParams = {...req.query} as any;
+            queryParams.include = {
+                details: true
+            };
+            const data = await (this.service as any).getAll(queryParams);
+            res.json({success: true, data});
+        } catch (err) {
+            next(err);
+        }
+    };
+
     store = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const {name, price, description, categories, options} = req.body;

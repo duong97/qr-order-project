@@ -5,8 +5,8 @@ import bcrypt from "bcrypt";
 import {UserDTO} from "@/modules/user/user.dto";
 
 export class UserService extends BaseService<UserRepository> {
-    constructor(repository: UserRepository) {
-        super(repository);
+    constructor() {
+        super(new UserRepository());
     }
 
     async create(data: UserDTO) {

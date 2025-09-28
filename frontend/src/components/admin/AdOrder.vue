@@ -15,8 +15,10 @@ import {useRouter} from "vue-router";
 import {useAuthStore} from "@/store/AuthStore";
 import {useOrderStore} from "@/store/OrderStore";
 import {UserApi} from "@/api/admin/UserApi";
+import {OrderApi} from "@/api/admin/OrderApi";
 
 const userApi = new UserApi();
+const orderApi = new OrderApi()
 
 export default defineComponent({
     name: "qrt-admin-order",
@@ -34,6 +36,10 @@ export default defineComponent({
     setup() {
         // Check user login
         userApi.currentUserInfo();
+
+        // @todo show list order
+        const orderList = orderApi.list();
+        console.log('orders', orderList)
 
         const authStore = useAuthStore();
         const router = useRouter();

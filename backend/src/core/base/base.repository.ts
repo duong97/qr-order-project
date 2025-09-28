@@ -15,7 +15,8 @@ export class BaseRepository<TModel> {
         return this.model.findFirst(args);
     }
 
-    async findById(id: number): Promise<any | null> {
+    async findById(id?: number): Promise<any | null> {
+        if (!id) return null;
         // @ts-ignore
         return this.model.findUnique({ where: { id } });
     }

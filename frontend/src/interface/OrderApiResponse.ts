@@ -1,4 +1,7 @@
 // Đơn hàng
+import Table from "@/interface/Table";
+import Product from "@/interface/Product";
+
 export default interface OrderApiResponse {
     id?: number|null,
     code?: string|null,
@@ -8,6 +11,7 @@ export default interface OrderApiResponse {
     orderStatus?: number|null,
     paymentStatus?: number|null,
     tableId?: number|null,
+    table?: Table|null,
     totalAmount?: number|null,
     details?: OrderDetailApiResponse[]|null,
 }
@@ -19,6 +23,7 @@ export interface OrderDetailApiResponse {
     orderId?: number|null,
     price?: number|null,
     productId?: number|null,
+    product?: Product|null,
     qty?: number|null,
     totalAmount?: number|null,
     productOptions?: OrderDetailProductOptionApiResponse[]|null,

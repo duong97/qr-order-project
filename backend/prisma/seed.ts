@@ -98,20 +98,6 @@ async function main() {
     console.log('🌱 Seeding tables...');
     await prisma.table.createMany({ data: seedData.tables });
 
-    console.log('🌱 Seeding categories & products...');
-    for (const cat of seedData.categories) {
-        const category = await prisma.category.create({ data: { name: cat.name } });
-        for (const prod of cat.products) {
-            await prisma.product.create({
-                data: {
-                    name: prod.name,
-                    price: prod.price,
-                    categories: { connect: { id: category.id } },
-                },
-            });
-        }
-    }
-
     console.log('🌱 Seeding options...');
     for (const opt of seedData.options) {
         await prisma.option.create({
@@ -121,6 +107,29 @@ async function main() {
                 items: opt.items,
             },
         });
+    }
+
+    const allOptions = await prisma.option.findMany();
+    console.log('🌱 Seeding categories & products...');
+    for (const cat of seedData.categories) {
+        const category = await prisma.category.create({ data: { name: cat.name } });
+        for (const prod of cat.products) {
+            // lấy ngẫu nhiên 2 option gắn vào product
+            const shuffled = [...allOptions].sort(() => 0.5 - Math.random());
+            const randomOptions = shuffled.slice(0, 2);
+
+            // Tạo product
+            await prisma.product.create({
+                data: {
+                    name: prod.name,
+                    price: prod.price,
+                    categories: { connect: { id: category.id } },
+                    options: {
+                        connect: randomOptions.map(opt => ({ id: opt.id })),
+                    },
+                },
+            });
+        }
     }
 
     console.log('🌱 Seeding sample orders...');

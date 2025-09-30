@@ -10,6 +10,8 @@ import {
     Empty,
     Tag,
     NavBar,
+    Grid,
+    GridItem,
 } from "vant";
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/store/AuthStore";
@@ -33,6 +35,8 @@ export default defineComponent({
         [Empty.name]: Empty,
         [Tag.name]: Tag,
         [NavBar.name]: NavBar,
+        [Grid.name]: Grid,
+        [GridItem.name]: GridItem,
     },
     setup() {
         // Check user login
@@ -84,41 +88,34 @@ export default defineComponent({
 <!--        Show danh sách order-->
         <div v-else>
 <!--            @todo Show list item order-->
-            <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-2">
+            <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-5">
                 <van-cell-group>
-                    <van-cell
-                        v-for="(item, itemIndex) in (order.details || [])"
-                        :key="itemIndex"
-                    >
+                    <van-cell>
                         <template #title>
-                            <van-tag plain size="large" type="primary" class="mr-2">{{ order.tableId || 'Table' }}</van-tag>
-                            <b class="is-size-6">{{ `Món #${item.productId}` }}</b>
+                            <van-tag plain size="large" type="primary" class="mr-2">{{ order.table.code || 'Table' }}</van-tag>
+                            <b class="is-size-6">{{ order.table.name }}</b>
                         </template>
-                        <template #label>
-                            <div v-for="variant in (item.productOptions || [])" :key="variant.id" class="mb-1">
-                                <div class="flex justify-between">
+                    </van-cell>
+                    <van-cell>
+                        {{ (order.createdAt) }}
+                    </van-cell>
+                    <van-cell>
+                        <div v-for="(_orderDetail, itemIndex) in (order.details || [])" :key="itemIndex">
+                            <van-grid :column-num="3">
+                                <van-grid-item :text="_orderDetail.product.name" />
+                                <van-grid-item :text="'SL: ' + _orderDetail.qty" />
+                                <van-grid-item :text="formatCurrency(_orderDetail.price)" />
+                            </van-grid>
+                            <p v-for="_productOpt in (_orderDetail.productOptions || [])" :key="_productOpt.id">
+                                {{ _productOpt.name }}:
+                                <span v-for="optItem in _productOpt.items" :key="optItem.id">
                                     <span>
-                                    SL: {{ variant.qty }} • Giá: {{ formatCurrency(variant.price) }}
+                                        {{ optItem.name }}
+                                        <span v-if="optItem.price > 0"> (+{{ formatCurrency(optItem.price) }}) </span>
                                     </span>
-                                    <span v-if="variant.note">📝 {{ variant.note }}</span>
-                                </div>
-
-                                <div v-if="variant.itemOptions && variant.itemOptions.length"
-                                     class="text-xs text-gray-500 ml-2">
-                                    <div v-for="opt in variant.itemOptions" :key="opt.id">
-                                        {{ opt.name }}:
-                                        <span v-for="optItem in opt.items" :key="optItem.id">
-                                            <span v-if="optItem.id === opt.selected">
-                                                {{ optItem.name }}
-                                            <span v-if="optItem.price > 0"> (+{{ formatCurrency(optItem.price) }}) </span>
-                                          </span>
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <van-divider dashed/>
-                            </div>
-                        </template>
+                                </span>
+                            </p>
+                        </div>
                     </van-cell>
                 </van-cell-group>
             </div>

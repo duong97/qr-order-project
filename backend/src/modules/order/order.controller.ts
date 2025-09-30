@@ -11,7 +11,25 @@ export class OrderController extends BaseController<OrderService> {
         try {
             const queryParams = {...req.query} as any;
             queryParams.include = {
-                details: true
+                details: {
+                    include: {
+                        product: {
+                            select: {
+                                id: true,
+                                name: true,
+                                price: true,
+                                thumbnail: true,
+                            },
+                        },
+                    }
+                },
+                table: {
+                    select: {
+                        id: true,
+                        name: true,
+                        code: true,
+                    },
+                }
             };
             const data = await (this.service as any).getAll(queryParams);
             res.json({success: true, data});

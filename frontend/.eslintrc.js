@@ -13,7 +13,7 @@ module.exports = {
     },
     rules: {
         // Chỗ này mày thêm rule tùy ý, ví dụ:
-        'no-console': 'warn',
-        'no-debugger': 'warn',
+        // 'no-console': 'warn',
+        // 'no-debugger': 'warn',
     },
 };

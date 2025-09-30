@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent, onMounted, ref} from "vue";
 import {
     Button,
     Tabs,
@@ -16,6 +16,7 @@ import {useAuthStore} from "@/store/AuthStore";
 import {useOrderStore} from "@/store/OrderStore";
 import {UserApi} from "@/api/admin/UserApi";
 import {OrderApi} from "@/api/admin/OrderApi";
+import OrderApiResponse from "@/interface/OrderApiResponse";
 
 const userApi = new UserApi();
 const orderApi = new OrderApi()
@@ -37,9 +38,13 @@ export default defineComponent({
         // Check user login
         userApi.currentUserInfo();
 
-        // @todo show list order
-        const orderList = orderApi.list();
-        console.log('orders', orderList)
+        const orders = ref<OrderApiResponse[]>([]);
+        onMounted(() => {
+            // fetch API ở đây
+            orderApi.list().then((_orders: OrderApiResponse[]) => {
+                orders.value = _orders;
+            });
+        });
 
         const authStore = useAuthStore();
         const router = useRouter();
@@ -56,6 +61,7 @@ export default defineComponent({
             authStore,
             orderStore,
             router,
+            orders,
             formatCurrency,
         };
     },
@@ -73,22 +79,23 @@ export default defineComponent({
         <h4 class="title has-text-centered">Quản lý order</h4>
 
 <!--        Empty component-->
-        <van-empty v-if="!orderStore.orders.length" description="Chưa có đơn hàng nào"/>
+        <van-empty v-if="!orders.length" description="Chưa có đơn hàng nào"/>
 
 <!--        Show danh sách order-->
         <div v-else>
-            <div v-for="(order, orderIndex) in orderStore.orders" :key="orderIndex" class="mb-2">
+<!--            @todo Show list item order-->
+            <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-2">
                 <van-cell-group>
                     <van-cell
-                        v-for="(item, itemIndex) in (order as any).items || []"
+                        v-for="(item, itemIndex) in (order.details || [])"
                         :key="itemIndex"
                     >
                         <template #title>
-                            <van-tag plain size="large" type="primary" class="mr-2">{{ order.tableName || 'Table' }}</van-tag>
-                            <b class="is-size-6">{{ `Món #${item.id}` }}</b>
+                            <van-tag plain size="large" type="primary" class="mr-2">{{ order.tableId || 'Table' }}</van-tag>
+                            <b class="is-size-6">{{ `Món #${item.productId}` }}</b>
                         </template>
                         <template #label>
-                            <div v-for="variant in item.variants || []" :key="variant.id" class="mb-1">
+                            <div v-for="variant in (item.productOptions || [])" :key="variant.id" class="mb-1">
                                 <div class="flex justify-between">
                                     <span>
                                     SL: {{ variant.qty }} • Giá: {{ formatCurrency(variant.price) }}

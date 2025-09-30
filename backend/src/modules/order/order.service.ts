@@ -36,7 +36,7 @@ export class OrderService extends BaseService<OrderRepository> {
 
         const orderData = {
             code: this.generateOrderCode().toString(),
-            tableId: orderInput.tableId || 0,
+            tableId: orderInput.tableId || 1,
             note: orderInput.note || '',
             details: {
                 create: orderDetails

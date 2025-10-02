@@ -1,6 +1,7 @@
 import {BaseService} from '@/core/base/base.service';
 import {OrderRepository} from './order.repository';
 import {OrderInput} from "@/modules/order/order.validator";
+import {ORDER_STATUSES, PAYMENT_STATUSES} from "@/core/const/default";
 
 export class OrderService extends BaseService<OrderRepository> {
     constructor() {
@@ -54,5 +55,17 @@ export class OrderService extends BaseService<OrderRepository> {
 
     generateOrderCode() {
         return Math.floor(10000 + Math.random() * 90000);
+    }
+
+    async confirm(id: number) {
+        return this.repository.update(id, { orderStatus: ORDER_STATUSES.PROCESSING });
+    }
+
+    async complete(id: number) {
+        return this.repository.update(id, { orderStatus: ORDER_STATUSES.COMPLETED, paymentStatus: PAYMENT_STATUSES.PAID });
+    }
+
+    async cancel(id: number) {
+        return this.repository.update(id, { orderStatus: ORDER_STATUSES.CANCELLED });
     }
 }

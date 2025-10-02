@@ -1,6 +1,7 @@
 import {BaseController} from '@/core/base/base.controller';
 import {OrderService} from './order.service';
 import {NextFunction, Request, Response} from "express";
+import {ORDER_STATUS_LABELS, ORDER_STATUSES} from "@/core/const/default";
 
 export class OrderController extends BaseController<OrderService> {
     constructor() {
@@ -31,8 +32,20 @@ export class OrderController extends BaseController<OrderService> {
                     },
                 }
             };
-            const data = await (this.service as any).getAll(queryParams);
-            res.json({success: true, data});
+            const data = await this.service.getAll(queryParams);
+            const orders = data.map(order => {
+                order.orderStatusLabel = ORDER_STATUS_LABELS[order.orderStatus] || 'Unknown';
+
+                order.isNew = order.orderStatus === ORDER_STATUSES.NEW || order.orderStatus === null;
+                order.isProcessing = order.orderStatus === ORDER_STATUSES.PROCESSING;
+                order.isCompleted = order.orderStatus === ORDER_STATUSES.COMPLETED;
+                order.isCancelled = order.orderStatus === ORDER_STATUSES.CANCELLED;
+
+                order.canComplete = order.isNew || order.isProcessing;
+                order.canCancel = order.isNew || order.isProcessing;
+                return order;
+            });
+            res.json({success: true, data: orders});
         } catch (err) {
             next(err);
         }
@@ -62,4 +75,19 @@ export class OrderController extends BaseController<OrderService> {
             next(err);
         }
     };
+
+    confirm = async (req: Request, res: Response, next: NextFunction) => {
+        const id = +req.params.id;
+        return await this.service.confirm(id);
+    }
+
+    complete = async (req: Request, res: Response, next: NextFunction) => {
+        const id = +req.params.id;
+        return await this.service.complete(id);
+    }
+
+    cancel = async (req: Request, res: Response, next: NextFunction) => {
+        const id = +req.params.id;
+        return await this.service.cancel(id);
+    }
 }

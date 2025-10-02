@@ -13,6 +13,7 @@ import {
     Grid,
     GridItem,
     Button,
+    Row,
 } from "vant";
 
 const userApi = new UserApi();
@@ -36,7 +37,15 @@ orderStore.connect();
 // @todo refactor api in service without use repository
 // @todo handle list status and payment status
 // @todo handle confirm order, complete order, cancel order...
+// @doing: giấu nút hủy bên trong nút mũi tên của cell
 
+async function confirmOrder(id?: number|null): Promise<boolean> {
+    if (!id) {
+        return false;
+    }
+    await orderApi.confirm(id);
+    return true;
+}
 </script>
 
 <template>
@@ -56,21 +65,36 @@ orderStore.connect();
         <div v-else>
             <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-5">
                 <CellGroup>
-                    <Cell>
+                    <Cell is-link arrow-direction="down">
                         <template #title>
-                            <Tag plain size="large" type="primary" class="mr-2">
+                            <Tag size="large" type="primary" class="mr-2">
                                 {{ order.table.code || "Table" }}
                             </Tag>
                             <b class="is-size-6">{{ order.table.name }}</b>
                         </template>
                         <template #value>
-                            <Button type="primary" size="small" class="mr-2" icon="good-job-o" icon-position="right">Xác nhận</Button>
-<!--                            <Button type="success" size="small" class="mr-2" icon="success" icon-position="right">Hoàn thành</Button>-->
-<!--                            <Button type="danger" size="small" icon="cross"  icon-position="right">Hủy</Button>-->
+                            <Tag plain size="large" type="primary" class="mr-2">
+                                {{ order.orderStatusLabel }}
+                            </Tag>
                         </template>
                     </Cell>
                     <Cell>
-                        {{ formatDate(order.createdAt) }}
+                        <Row justify="space-between">
+                            <van-col span="6">
+                                {{ formatDate(order.createdAt) }}
+                            </van-col>
+                            <van-col span="6">
+                                <Button v-if="order.isNew" @click="confirmOrder(order.id)" type="primary" size="small" class="mr-2" icon="good-job-o" icon-position="right">
+                                    Xác nhận
+                                </Button>
+                                <Button v-if="order.canComplete" type="success" size="small" class="mr-2" icon="success" icon-position="right">
+                                    Hoàn thành
+                                </Button>
+                                <Button v-if="order.canCancel" type="danger" size="small" icon="cross"  icon-position="right">
+                                    Hủy
+                                </Button>
+                            </van-col>
+                        </Row>
                     </Cell>
                     <Cell>
                         <div
@@ -88,13 +112,13 @@ orderStore.connect();
                             >
                                 {{ _productOpt.name }}:
                                 <span v-for="optItem in _productOpt.items" :key="optItem.id">
-                  <span>
-                    {{ optItem.name }}
-                    <span v-if="optItem.price > 0">
-                      (+{{ formatCurrency(optItem.price) }})
-                    </span>
-                  </span>
-                </span>
+                                  <span>
+                                    {{ optItem.name }}
+                                    <span v-if="optItem.price > 0">
+                                      (+{{ formatCurrency(optItem.price) }})
+                                    </span>
+                                  </span>
+                                </span>
                             </p>
                         </div>
                     </Cell>

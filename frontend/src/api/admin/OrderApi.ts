@@ -1,6 +1,13 @@
 import {BaseAdminApi} from "@/api/admin/BaseAdminApi";
 import OrderApiResponse from "@/interface/OrderApiResponse";
 
+const orderStatus = {
+    NEW: 0,
+    PROCESSING: 1,
+    COMPLETED: 2,
+    CANCELLED: 3,
+}
+
 export class OrderApi extends BaseAdminApi {
     constructor() {
         super('/admin/orders');
@@ -8,5 +15,20 @@ export class OrderApi extends BaseAdminApi {
 
     async list() {
         return await super.list() as OrderApiResponse[];
+    }
+
+    async confirm(id: number) {
+        this.path = '/admin/orders/' + id + '/confirm';
+        return await this.axiosInstance.post(this.path);
+    }
+
+    async complete(id: number) {
+        this.path = '/admin/orders/' + id + '/complete';
+        return await this.axiosInstance.post(this.path);
+    }
+
+    async cancel(id: number) {
+        this.path = '/admin/orders/' + id + '/cancel';
+        return await this.axiosInstance.post(this.path);
     }
 }

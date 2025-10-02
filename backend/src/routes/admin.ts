@@ -17,16 +17,23 @@ adminRouter.use(authMiddleware);
 const routePrefix = '/admin';
 
 const userController = new UserController();
+const orderController = new OrderController();
 
 // Another path (phải đưa path ngoại lệ lên trên, nếu ko thì path /:id sẽ match trước và không vào được router này)
+// --- users ---
 adminRouter.get('/admin/users/current', userController.currentUserInfo?.bind(userController));
+
+// --- orders ---
+adminRouter.get('/admin/orders/:id/confirm', orderController.confirm?.bind(orderController));
+adminRouter.get('/admin/orders/:id/complete', orderController.complete?.bind(orderController));
+adminRouter.get('/admin/orders/:id/cancel', orderController.cancel?.bind(orderController));
 
 const routes = [
     {path: '/categories', controller: new CategoryController(), validator: new CategoryValidator()},
     {path: '/products', controller: new ProductController(), validator: new ProductValidator()},
     {path: '/options', controller: new OptionController(), validator: new OptionValidator()},
     {path: '/users', controller: userController, validator: new UserValidator()},
-    {path: '/orders', controller: new OrderController, validator: new OrderValidator()},
+    {path: '/orders', controller: orderController, validator: new OrderValidator()},
 ];
 
 for (const route of routes) {

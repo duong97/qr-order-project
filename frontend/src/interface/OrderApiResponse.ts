@@ -9,11 +9,20 @@ export default interface OrderApiResponse {
     createdBy?: number|null,
     note?: string|null,
     orderStatus?: number|null,
+    orderStatusLabel?: string|null,
     paymentStatus?: number|null,
     tableId?: number|null,
     table?: Table|null,
     totalAmount?: number|null,
     details?: OrderDetailApiResponse[]|null,
+
+    isNew?: boolean,
+    isProcessing?: boolean,
+    isCompleted?: boolean,
+    isCancelled?: boolean,
+
+    canComplete?: boolean,
+    canCancel?: boolean,
 }
 
 // Chi tiết đơn hàng (1 sp có thể có 2 detail)

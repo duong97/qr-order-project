@@ -9,3 +9,22 @@ export const SOCKET_EVENTS = {
     ORDER_NEW: "order:new",
 } as const;
 export type SocketEvent = typeof SOCKET_EVENTS[keyof typeof SOCKET_EVENTS];
+
+// --- order ---
+export const ORDER_STATUSES = {
+    NEW: 0,
+    PROCESSING: 1,
+    COMPLETED: 2,
+    CANCELLED: 3,
+}
+export type OrderStatus = typeof ORDER_STATUSES[keyof typeof ORDER_STATUSES];
+export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+    [ORDER_STATUSES.NEW]: "Mới",
+    [ORDER_STATUSES.PROCESSING]: "Đang thực hiện",
+    [ORDER_STATUSES.COMPLETED]: "Hoàn thành",
+    [ORDER_STATUSES.CANCELLED]: "Đã hủy",
+};
+export const PAYMENT_STATUSES = {
+    UNPAID: 0,
+    PAID: 1,
+}

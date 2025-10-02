@@ -3,8 +3,8 @@ import {ProductRepository} from './product.repository';
 import {ValidationError} from "@/core/middleware/errorHandler";
 
 export class ProductService extends BaseService<ProductRepository> {
-    constructor(repository: ProductRepository) {
-        super(repository);
+    constructor() {
+        super(new ProductRepository());
     }
 
     async create(data: any) {

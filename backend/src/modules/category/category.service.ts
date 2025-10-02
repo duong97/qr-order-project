@@ -3,8 +3,8 @@ import {CategoryRepository} from './category.repository';
 import {ValidationError} from "@/core/middleware/errorHandler";
 
 export class CategoryService extends BaseService<CategoryRepository> {
-    constructor(repository: CategoryRepository) {
-        super(repository);
+    constructor() {
+        super(new CategoryRepository());
     }
 
     async create(data: any) {

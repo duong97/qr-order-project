@@ -3,8 +3,8 @@ import {OptionRepository} from './option.repository';
 import {ValidationError} from "@/core/middleware/errorHandler";
 
 export class OptionService extends BaseService<OptionRepository> {
-    constructor(repository: OptionRepository) {
-        super(repository);
+    constructor() {
+        super(new OptionRepository());
     }
 
     async create(data: any) {

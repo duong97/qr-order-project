@@ -1,11 +1,10 @@
 import {BaseController} from '@/core/base/base.controller';
 import {ProductService} from './product.service';
-import {ProductRepository} from './product.repository';
 import {NextFunction, Request, Response} from "express";
 
 export class ProductController extends BaseController<ProductService> {
     constructor() {
-        super(new ProductService(new ProductRepository()));
+        super(new ProductService());
     }
 
     // override hoặc thêm action riêng nếu cần

@@ -22,14 +22,13 @@ export class BaseRepository<TModel> {
     }
 
     async create(data: any, include: any = {}): Promise<any> {
-        console.log('data', JSON.stringify({ data, include }));
         // @ts-ignore
         return this.model.create({ data, include });
     }
 
-    async update(id: number, data: any): Promise<any> {
+    async update(id: number, data: any, include: any = {}): Promise<any> {
         // @ts-ignore
-        return this.model.update({ where: { id }, data });
+        return this.model.update({ where: { id }, data, include });
     }
 
     async delete(id: number): Promise<any> {

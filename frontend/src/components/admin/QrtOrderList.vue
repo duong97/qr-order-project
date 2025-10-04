@@ -15,7 +15,8 @@ import {
     Button,
     Row,
     Collapse,
-    CollapseItem, showNotify,
+    CollapseItem,
+    showNotify,
 } from "vant";
 
 const userApi = new UserApi();
@@ -41,12 +42,22 @@ orderStore.connect();
 // @todo handle list status and payment status
 // @todo handle confirm order, complete order, cancel order...
 
+// Load lại list order
 async function refreshOrders() {
     orderApi.list().then((_orders: OrderApiResponse[]) => {
         orders.value = _orders;
+
+        // Sau khi load lại thì reset trạng thái các buttons
+        collapseAllOrderSubButtons();
     });
 }
 
+// đóng hết các collapse order button (các nút hiện thêm ngoài nút thao tác chính)
+function collapseAllOrderSubButtons() {
+    activeOrders.value = [];
+}
+
+// XÁC NHẬN đơn hàng
 async function confirmOrder(id?: number|null): Promise<boolean> {
     if (!id) {
         return false;
@@ -62,6 +73,7 @@ async function confirmOrder(id?: number|null): Promise<boolean> {
     }
 }
 
+// HOÀN THÀNH đơn hàng
 async function completeOrder(id?: number|null): Promise<boolean> {
     if (!id) {
         return false;
@@ -69,6 +81,12 @@ async function completeOrder(id?: number|null): Promise<boolean> {
     const result = await orderApi.complete(id);
     if (result.success) {
         showNotify({ type: "success", message: "Đã hoàn thành!" });
+
+        const updatedOrder = result.data as OrderApiResponse;
+        const index = orders.value.findIndex(o => o.id === updatedOrder.id);
+        if (index !== -1) {
+            orders.value[index] = updatedOrder;
+        }
         await refreshOrders();
         return true;
     } else {
@@ -77,6 +95,7 @@ async function completeOrder(id?: number|null): Promise<boolean> {
     }
 }
 
+// HỦY đơn hàng
 async function cancelOrder(id?: number|null): Promise<boolean> {
     if (!id) {
         return false;
@@ -107,11 +126,12 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
         <Empty v-if="!orders.length" description="Chưa có đơn hàng nào" />
 
         <!-- Show danh sách order -->
-        <div v-else>
+        <div v-else v-animated-list="'fade'">
             <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-5">
                 <CellGroup>
                     <Collapse v-model="activeOrders">
                         <CollapseItem :name="orderIndex">
+<!--                            Order title...-->
                             <template #title>
                                 <Tag size="large" type="primary" class="mr-2">
                                     {{ order.table.code || "Table" }}
@@ -125,13 +145,18 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                                 </Tag>
                             </template>
 
+<!--                            Order buttons-->
                             <div class="p-2">
                                 <Row justify="end">
                                     <div>
-                                        <Button v-if="order.canComplete && order.isNew" @click="completeOrder(order.id)" type="success" size="small" class="mr-2" icon="success" icon-position="right">
-                                            Hoàn thành
-                                        </Button>
-                                        <Button v-if="order.canCancel" @click="cancelOrder(order.id)" type="danger" size="small" icon="cross" icon-position="right">
+                                        <Button v-if="order.canCancel"
+                                                @click="cancelOrder(order.id)"
+                                                type="danger"
+                                                size="small"
+                                                icon="cross"
+                                                icon-position="right"
+                                                v-confirm="'Xác nhận hoàn thành đơn hàng'"
+                                        >
                                             Hủy
                                         </Button>
                                     </div>
@@ -145,11 +170,25 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                                 {{ formatDate(order.createdAt) }}
                             </div>
                             <div>
-                                <Button v-if="order.isNew" @click="confirmOrder(order.id)" type="primary" size="small" class="mr-2" icon="good-job-o" icon-position="right">
-                                    Xác nhận
-                                </Button>
-                                <Button v-if="order.canComplete && !order.isNew" @click="completeOrder(order.id)" type="success" size="small" class="mr-2" icon="success" icon-position="right">
+                                <Button v-if="order.canComplete && !order.isNew"
+                                        @click="completeOrder(order.id)"
+                                        type="success"
+                                        size="small"
+                                        class="mr-2"
+                                        icon="success"
+                                        icon-position="right"
+                                        v-confirm="'Xác nhận hoàn thành đơn hàng'"
+                                >
                                     Hoàn thành
+                                </Button>
+                                <Button v-if="order.isNew"
+                                        @click="confirmOrder(order.id)"
+                                        type="primary" size="small"
+                                        class="mr-2"
+                                        icon="good-job-o"
+                                        icon-position="right"
+                                >
+                                    Xác nhận
                                 </Button>
                             </div>
                         </Row>
@@ -187,32 +226,4 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
 </template>
 
 <style scoped>
-.flex {
-    display: flex;
-    justify-content: space-between;
-}
-.mb-1 {
-    margin-bottom: 4px;
-}
-.mb-2 {
-    margin-bottom: 8px;
-}
-.mb-4 {
-    margin-bottom: 16px;
-}
-.ml-2 {
-    margin-left: 8px;
-}
-.text-xs {
-    font-size: 12px;
-}
-.text-gray-500 {
-    color: #999;
-}
-.table-title {
-    padding: 4px 8px;
-    background: #f7f8fa;
-    border-radius: 6px;
-    margin-bottom: 4px;
-}
 </style>

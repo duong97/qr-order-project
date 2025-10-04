@@ -15,6 +15,8 @@ import { Locale } from 'vant';
 import enUS from 'vant/es/locale/lang/en-US';
 import {authHandler} from "@/handler/AuthHandler";
 import {initAuthStoreWatcher, useAuthStore} from "@/store/AuthStore";
+import ConfirmDirective from '@/directives/v-confirm';
+import AnimateListDirective from "@/directives/v-animated-list";
 
 const app = createApp(App)
 app.config.globalProperties.$filters = {
@@ -24,6 +26,8 @@ app.config.globalProperties.$filters = {
 const pinia = createPinia();
 app.use(pinia)
 app.use(router)
+app.directive('confirm', ConfirmDirective);
+app.directive('animated-list', AnimateListDirective);
 authHandler.init(router)
 Locale.use('en-US', enUS);
 

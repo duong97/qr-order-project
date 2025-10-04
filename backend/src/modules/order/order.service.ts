@@ -57,15 +57,15 @@ export class OrderService extends BaseService<OrderRepository> {
         return Math.floor(10000 + Math.random() * 90000);
     }
 
-    async confirm(id: number) {
-        return this.repository.update(id, { orderStatus: ORDER_STATUSES.PROCESSING });
+    async confirm(id: number, include: any = {}) {
+        return this.repository.update(id, { orderStatus: ORDER_STATUSES.PROCESSING }, include);
     }
 
-    async complete(id: number) {
-        return this.repository.update(id, { orderStatus: ORDER_STATUSES.COMPLETED, paymentStatus: PAYMENT_STATUSES.PAID });
+    async complete(id: number, include: any = {}) {
+        return this.repository.update(id, { orderStatus: ORDER_STATUSES.COMPLETED, paymentStatus: PAYMENT_STATUSES.PAID }, include);
     }
 
-    async cancel(id: number) {
-        return this.repository.update(id, { orderStatus: ORDER_STATUSES.CANCELLED });
+    async cancel(id: number, include: any = {}) {
+        return this.repository.update(id, { orderStatus: ORDER_STATUSES.CANCELLED }, include);
     }
 }

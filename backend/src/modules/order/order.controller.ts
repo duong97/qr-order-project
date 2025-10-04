@@ -1,7 +1,8 @@
 import {BaseController} from '@/core/base/base.controller';
 import {OrderService} from './order.service';
 import {NextFunction, Request, Response} from "express";
-import {ORDER_STATUS_LABELS, ORDER_STATUSES} from "@/core/const/default";
+import {ORDER_SCENARIOS, ORDER_STATUSES} from "@/core/const/default";
+import {OrderModel} from "@/modules/order/order.model";
 
 export class OrderController extends BaseController<OrderService> {
     constructor() {
@@ -10,43 +11,22 @@ export class OrderController extends BaseController<OrderService> {
 
     index = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const scenario = ORDER_SCENARIOS.LIST;
+
             const queryParams = {
-                where: { orderStatus: { notIn: [ORDER_STATUSES.CANCELLED, ORDER_STATUSES.COMPLETED] }}
-            } as any;
-            queryParams.include = {
-                details: {
-                    include: {
-                        product: {
-                            select: {
-                                id: true,
-                                name: true,
-                                price: true,
-                                thumbnail: true,
-                            },
-                        },
-                    }
-                },
-                table: {
-                    select: {
-                        id: true,
-                        name: true,
-                        code: true,
-                    },
+                where: {
+                    OR: [
+                        { orderStatus: { notIn: [ORDER_STATUSES.CANCELLED, ORDER_STATUSES.COMPLETED] } },
+                        { orderStatus: null },
+                    ],
                 }
-            };
+            } as any;
+            queryParams.include = OrderModel.getRelations(scenario);
             queryParams.orderBy = { id: 'desc' }
             const data = await this.service.getAll(queryParams);
             const orders = data.map(order => {
-                order.orderStatusLabel = ORDER_STATUS_LABELS[order.orderStatus || ORDER_STATUSES.NEW] || 'Unknown';
-
-                order.isNew = order.orderStatus === ORDER_STATUSES.NEW || order.orderStatus === null;
-                order.isProcessing = order.orderStatus === ORDER_STATUSES.PROCESSING;
-                order.isCompleted = order.orderStatus === ORDER_STATUSES.COMPLETED;
-                order.isCancelled = order.orderStatus === ORDER_STATUSES.CANCELLED;
-
-                order.canComplete = order.isNew || order.isProcessing;
-                order.canCancel = order.isNew || order.isProcessing;
-                return order;
+                const orderModel = new OrderModel(order);
+                return orderModel.toJSON(scenario);
             });
             res.json({success: true, data: orders});
         } catch (err) {
@@ -81,19 +61,40 @@ export class OrderController extends BaseController<OrderService> {
 
     confirm = async (req: Request, res: Response, next: NextFunction) => {
         const id = +req.params.id;
-        const data = await this.service.confirm(id);
-        res.status(200).json({ success: true, data });
+        const scenario = ORDER_SCENARIOS.LIST;
+        const includeRelations = OrderModel.getRelations(scenario);
+
+        // Confirm order
+        const orderUpdated = await this.service.confirm(id, includeRelations);
+
+        // Return data with format
+        const orderModel = new OrderModel(orderUpdated);
+        res.status(200).json({ success: true, data: orderModel.toJSON(scenario) });
     }
 
     complete = async (req: Request, res: Response, next: NextFunction) => {
         const id = +req.params.id;
-        const data = await this.service.complete(id);
-        res.status(200).json({ success: true, data });
+        const scenario = ORDER_SCENARIOS.LIST;
+        const includeRelations = OrderModel.getRelations(scenario);
+
+        // Complete order
+        const orderUpdated = await this.service.complete(id, includeRelations);
+
+        // Return data with format
+        const orderModel = new OrderModel(orderUpdated);
+        res.status(200).json({ success: true, data: orderModel.toJSON(scenario) });
     }
 
     cancel = async (req: Request, res: Response, next: NextFunction) => {
         const id = +req.params.id;
-        const data = await this.service.cancel(id);
-        res.status(200).json({ success: true, data });
+        const scenario = ORDER_SCENARIOS.LIST;
+        const includeRelations = OrderModel.getRelations(scenario);
+
+        // Cancel order
+        const orderUpdated = await this.service.cancel(id, includeRelations);
+
+        // Return data with format
+        const orderModel = new OrderModel(orderUpdated);
+        res.status(200).json({ success: true, data: orderModel.toJSON(scenario) });
     }
 }

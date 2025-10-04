@@ -11,6 +11,7 @@ export const SOCKET_EVENTS = {
 export type SocketEvent = typeof SOCKET_EVENTS[keyof typeof SOCKET_EVENTS];
 
 // --- order ---
+// > order status
 export const ORDER_STATUSES = {
     NEW: 0,
     PROCESSING: 1,
@@ -24,7 +25,13 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
     [ORDER_STATUSES.COMPLETED]: "Hoàn thành",
     [ORDER_STATUSES.CANCELLED]: "Đã hủy",
 };
+// > order payment status
 export const PAYMENT_STATUSES = {
     UNPAID: 0,
     PAID: 1,
 }
+// > order scenario
+export const ORDER_SCENARIOS = {
+    LIST: "list",
+};
+export type OrderScenario = typeof ORDER_SCENARIOS[keyof typeof ORDER_SCENARIOS];

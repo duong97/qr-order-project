@@ -114,6 +114,7 @@ watch(
                 :class="{ 'is-active': isActive }"
             >
                 <div class="navbar-end">
+                    <router-link class="navbar-item" to="/">Home</router-link>
                     <a class="navbar-item">Giới thiệu</a>
 
                     <a class="navbar-item" @click="toggleTheme">
@@ -141,8 +142,8 @@ watch(
                         Hiện trang welcome
                     </a>
 
-                    <a v-if="isLogin" class="navbar-item" href="/admin">Quản lý</a>
-                    <a v-if="isLogin" class="navbar-item" href="/admin/orders">Đơn hàng</a>
+                    <router-link v-if="isLogin" class="navbar-item" to="/admin">Quản lý</router-link>
+                    <router-link v-if="isLogin" class="navbar-item" to="/admin/orders">Đơn hàng</router-link>
                 </div>
             </div>
         </Transition>

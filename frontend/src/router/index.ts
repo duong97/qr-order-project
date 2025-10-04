@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
-import Home from "@/components/Home.vue";
+import QrtHome from "@/components/QrtHome.vue";
 import Checkout from "@/components/Checkout.vue";
 import Login from "@/components/Login.vue";
 import AdminIndex from "@/components/admin/AdIndex.vue";
@@ -14,7 +14,7 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            component: Home,
+            component: QrtHome,
             beforeEnter: (to) => {
                 const tableName = (to.query.table || '') as string;
                 const tableStore = useTableStore();

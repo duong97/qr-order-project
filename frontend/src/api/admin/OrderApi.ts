@@ -7,21 +7,25 @@ export class OrderApi extends BaseAdminApi {
     }
 
     async list() {
+        this.path = '/admin/orders';
         return await super.list() as OrderApiResponse[];
     }
 
     async confirm(id: number) {
         this.path = '/admin/orders/' + id + '/confirm';
-        return await this.axiosInstance.post(this.path);
+        const response = await this.axiosInstance.post(this.path);
+        return response?.data;
     }
 
     async complete(id: number) {
         this.path = '/admin/orders/' + id + '/complete';
-        return await this.axiosInstance.post(this.path);
+        const response = await this.axiosInstance.post(this.path);
+        return response?.data;
     }
 
     async cancel(id: number) {
         this.path = '/admin/orders/' + id + '/cancel';
-        return await this.axiosInstance.post(this.path);
+        const response = await this.axiosInstance.post(this.path);
+        return response?.data;
     }
 }

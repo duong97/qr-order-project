@@ -14,6 +14,8 @@ import {
     GridItem,
     Button,
     Row,
+    Collapse,
+    CollapseItem, showNotify,
 } from "vant";
 
 const userApi = new UserApi();
@@ -24,10 +26,11 @@ userApi.currentUserInfo();
 
 const orders = ref<OrderApiResponse[]>([]);
 onMounted(() => {
-    orderApi.list().then((_orders: OrderApiResponse[]) => {
-        orders.value = _orders;
-    });
+    refreshOrders();
 });
+
+// Dùng để toggle các button phụ của đơn hàng
+const activeOrders = ref<number[]>([]);
 
 const orderStore = useOrderStore();
 orderStore.connect();
@@ -37,14 +40,56 @@ orderStore.connect();
 // @todo refactor api in service without use repository
 // @todo handle list status and payment status
 // @todo handle confirm order, complete order, cancel order...
-// @doing: giấu nút hủy bên trong nút mũi tên của cell
+
+async function refreshOrders() {
+    orderApi.list().then((_orders: OrderApiResponse[]) => {
+        orders.value = _orders;
+    });
+}
 
 async function confirmOrder(id?: number|null): Promise<boolean> {
     if (!id) {
         return false;
     }
-    await orderApi.confirm(id);
-    return true;
+    const result = await orderApi.confirm(id);
+    if (result.success) {
+        showNotify({ type: "success", message: "Đã xác nhận!" });
+        await refreshOrders();
+        return true;
+    } else {
+        showNotify({ type: "danger", message: "Có lỗi xảy ra!" });
+        return false;
+    }
+}
+
+async function completeOrder(id?: number|null): Promise<boolean> {
+    if (!id) {
+        return false;
+    }
+    const result = await orderApi.complete(id);
+    if (result.success) {
+        showNotify({ type: "success", message: "Đã hoàn thành!" });
+        await refreshOrders();
+        return true;
+    } else {
+        showNotify({ type: "danger", message: "Có lỗi xảy ra!" });
+        return false;
+    }
+}
+
+async function cancelOrder(id?: number|null): Promise<boolean> {
+    if (!id) {
+        return false;
+    }
+    const result = await orderApi.cancel(id);
+    if (result.success) {
+        showNotify({ type: "success", message: "Đã hủy!" });
+        await refreshOrders();
+        return true;
+    } else {
+        showNotify({ type: "danger", message: "Có lỗi xảy ra!" });
+        return false;
+    }
 }
 </script>
 
@@ -65,35 +110,48 @@ async function confirmOrder(id?: number|null): Promise<boolean> {
         <div v-else>
             <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-5">
                 <CellGroup>
-                    <Cell is-link arrow-direction="down">
-                        <template #title>
-                            <Tag size="large" type="primary" class="mr-2">
-                                {{ order.table.code || "Table" }}
-                            </Tag>
-                            <b class="is-size-6">{{ order.table.name }}</b>
-                        </template>
-                        <template #value>
-                            <Tag plain size="large" type="primary" class="mr-2">
-                                {{ order.orderStatusLabel }}
-                            </Tag>
-                        </template>
-                    </Cell>
+                    <Collapse v-model="activeOrders">
+                        <CollapseItem :name="orderIndex">
+                            <template #title>
+                                <Tag size="large" type="primary" class="mr-2">
+                                    {{ order.table.code || "Table" }}
+                                </Tag>
+                                <b class="is-size-6 mr-1">{{ '#' + (orderIndex + 1) + '. ' }}</b>
+                                <b class="is-size-6">{{ order.table.name }}</b>
+                            </template>
+                            <template #value>
+                                <Tag plain size="large" type="primary" class="mr-2">
+                                    {{ order.orderStatusLabel }}
+                                </Tag>
+                            </template>
+
+                            <div class="p-2">
+                                <Row justify="end">
+                                    <div>
+                                        <Button v-if="order.canComplete && order.isNew" @click="completeOrder(order.id)" type="success" size="small" class="mr-2" icon="success" icon-position="right">
+                                            Hoàn thành
+                                        </Button>
+                                        <Button v-if="order.canCancel" @click="cancelOrder(order.id)" type="danger" size="small" icon="cross" icon-position="right">
+                                            Hủy
+                                        </Button>
+                                    </div>
+                                </Row>
+                            </div>
+                        </CollapseItem>
+                    </Collapse>
                     <Cell>
                         <Row justify="space-between">
-                            <van-col span="6">
+                            <div>
                                 {{ formatDate(order.createdAt) }}
-                            </van-col>
-                            <van-col span="6">
+                            </div>
+                            <div>
                                 <Button v-if="order.isNew" @click="confirmOrder(order.id)" type="primary" size="small" class="mr-2" icon="good-job-o" icon-position="right">
                                     Xác nhận
                                 </Button>
-                                <Button v-if="order.canComplete" type="success" size="small" class="mr-2" icon="success" icon-position="right">
+                                <Button v-if="order.canComplete && !order.isNew" @click="completeOrder(order.id)" type="success" size="small" class="mr-2" icon="success" icon-position="right">
                                     Hoàn thành
                                 </Button>
-                                <Button v-if="order.canCancel" type="danger" size="small" icon="cross"  icon-position="right">
-                                    Hủy
-                                </Button>
-                            </van-col>
+                            </div>
                         </Row>
                     </Cell>
                     <Cell>

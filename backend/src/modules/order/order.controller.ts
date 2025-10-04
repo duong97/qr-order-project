@@ -10,7 +10,9 @@ export class OrderController extends BaseController<OrderService> {
 
     index = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const queryParams = {...req.query} as any;
+            const queryParams = {
+                where: { orderStatus: { notIn: [ORDER_STATUSES.CANCELLED, ORDER_STATUSES.COMPLETED] }}
+            } as any;
             queryParams.include = {
                 details: {
                     include: {
@@ -32,9 +34,10 @@ export class OrderController extends BaseController<OrderService> {
                     },
                 }
             };
+            queryParams.orderBy = { id: 'desc' }
             const data = await this.service.getAll(queryParams);
             const orders = data.map(order => {
-                order.orderStatusLabel = ORDER_STATUS_LABELS[order.orderStatus] || 'Unknown';
+                order.orderStatusLabel = ORDER_STATUS_LABELS[order.orderStatus || ORDER_STATUSES.NEW] || 'Unknown';
 
                 order.isNew = order.orderStatus === ORDER_STATUSES.NEW || order.orderStatus === null;
                 order.isProcessing = order.orderStatus === ORDER_STATUSES.PROCESSING;
@@ -78,16 +81,19 @@ export class OrderController extends BaseController<OrderService> {
 
     confirm = async (req: Request, res: Response, next: NextFunction) => {
         const id = +req.params.id;
-        return await this.service.confirm(id);
+        const data = await this.service.confirm(id);
+        res.status(200).json({ success: true, data });
     }
 
     complete = async (req: Request, res: Response, next: NextFunction) => {
         const id = +req.params.id;
-        return await this.service.complete(id);
+        const data = await this.service.complete(id);
+        res.status(200).json({ success: true, data });
     }
 
     cancel = async (req: Request, res: Response, next: NextFunction) => {
         const id = +req.params.id;
-        return await this.service.cancel(id);
+        const data = await this.service.cancel(id);
+        res.status(200).json({ success: true, data });
     }
 }

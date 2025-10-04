@@ -24,9 +24,9 @@ const orderController = new OrderController();
 adminRouter.get('/admin/users/current', userController.currentUserInfo?.bind(userController));
 
 // --- orders ---
-adminRouter.get('/admin/orders/:id/confirm', orderController.confirm?.bind(orderController));
-adminRouter.get('/admin/orders/:id/complete', orderController.complete?.bind(orderController));
-adminRouter.get('/admin/orders/:id/cancel', orderController.cancel?.bind(orderController));
+adminRouter.post('/admin/orders/:id/confirm', orderController.confirm?.bind(orderController));
+adminRouter.post('/admin/orders/:id/complete', orderController.complete?.bind(orderController));
+adminRouter.post('/admin/orders/:id/cancel', orderController.cancel?.bind(orderController));
 
 const routes = [
     {path: '/categories', controller: new CategoryController(), validator: new CategoryValidator()},

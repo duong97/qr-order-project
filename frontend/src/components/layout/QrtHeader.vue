@@ -52,6 +52,10 @@ function handleClickOutside(event: MouseEvent) {
     }
 }
 
+function toggleNavbar() {
+    isActive.value = !isActive.value;
+}
+
 // Lifecycle
 onMounted(() => {
     setTheme();
@@ -114,7 +118,7 @@ watch(
                 :class="{ 'is-active': isActive }"
             >
                 <div class="navbar-end">
-                    <router-link class="navbar-item" to="/">Home</router-link>
+                    <router-link  @click="toggleNavbar" class="navbar-item" to="/">Home</router-link>
                     <a class="navbar-item">Giới thiệu</a>
 
                     <a class="navbar-item" @click="toggleTheme">
@@ -142,8 +146,8 @@ watch(
                         Hiện trang welcome
                     </a>
 
-                    <router-link v-if="isLogin" class="navbar-item" to="/admin">Quản lý</router-link>
-                    <router-link v-if="isLogin" class="navbar-item" to="/admin/orders">Đơn hàng</router-link>
+                    <router-link v-if="isLogin" @click="toggleNavbar" class="navbar-item" to="/admin">Quản lý</router-link>
+                    <router-link v-if="isLogin" @click="toggleNavbar" class="navbar-item" to="/admin/order">Đơn hàng</router-link>
                 </div>
             </div>
         </Transition>

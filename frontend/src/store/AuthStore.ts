@@ -12,29 +12,33 @@ export const useAuthStore = defineStore('auth', {
         user: useStorage<CurrentUser | null>('currentUser', null, undefined, { serializer: StorageSerializers.object }),
     }),
 
+    getters: {
+        isLoggedIn: (state) => !!state.user?.token
+    },
+
     actions: {
         async login(username: string, password: string) {
-            const loginData = await authApi.login(username, password);
-            const token = loginData.data?.token;
+            try {
+                const loginData = await authApi.login(username, password);
+                const token = loginData.data?.token;
 
-            if (token) {
-                this.user = {
-                    id: loginData.data.user?.id,
-                    username,
-                    token
-                };
-                socket.auth = {token};
-                return true;
+                if (token) {
+                    this.user = {
+                        id: loginData.data.user?.id,
+                        username,
+                        token
+                    };
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                return false;
             }
-            return false;
         },
         logout() {
             this.user = null;
             socket.auth = {};
             return true;
-        },
-        isLoggedIn() {
-            return !!this.user?.token;
         },
     }
 });

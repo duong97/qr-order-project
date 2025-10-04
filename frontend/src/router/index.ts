@@ -36,7 +36,7 @@ const router = createRouter({
             component: Login,
             beforeEnter: () => {
                 const authStore = useAuthStore();
-                if (authStore.isLoggedIn()) {
+                if (authStore.isLoggedIn) {
                     return { path: '/admin' }
                 } else {
                     return true;
@@ -61,10 +61,10 @@ router.beforeEach((to) => {
     const authStore = useAuthStore();
     const tableStore = useTableStore();
 
-    if (!authStore.isLoggedIn() && to.path.startsWith("/admin")) {
+    if (!authStore.isLoggedIn && to.path.startsWith("/admin")) {
         return { name: "login" };
     }
-    if (authStore.isLoggedIn() && to.name === "login") {
+    if (authStore.isLoggedIn && to.name === "login") {
         return { name: 'admin' }
     }
 

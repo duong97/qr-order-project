@@ -120,7 +120,7 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                                 <b class="is-size-6">{{ order.table.name }}</b>
                             </template>
                             <template #value>
-                                <Tag plain size="large" type="primary" class="mr-2">
+                                <Tag plain size="large" :type="order.tagType" class="mr-2">
                                     {{ order.orderStatusLabel }}
                                 </Tag>
                             </template>

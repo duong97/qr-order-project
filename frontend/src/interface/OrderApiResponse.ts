@@ -23,6 +23,8 @@ export default interface OrderApiResponse {
 
     canComplete?: boolean,
     canCancel?: boolean,
+
+    tagType?: string|null,
 }
 
 // Chi tiết đơn hàng (1 sp có thể có 2 detail)

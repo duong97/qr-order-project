@@ -8,7 +8,19 @@ export class OrderApi extends BaseAdminApi {
 
     async list() {
         this.path = '/admin/orders';
-        return await super.list() as OrderApiResponse[];
+        const orders = await super.list();
+        return orders.map((order: OrderApiResponse) => {
+            if (order.isProcessing) {
+                order.tagType = 'warning';
+            } else if (order.isCompleted) {
+                order.tagType = 'success';
+            } else if (order.isCancelled) {
+                order.tagType = 'danger';
+            } else {
+                order.tagType = 'primary';
+            }
+            return order;
+        }) as OrderApiResponse[];
     }
 
     async confirm(id: number) {

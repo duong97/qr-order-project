@@ -16,4 +16,10 @@ module.exports = {
         // 'no-console': 'warn',
         // 'no-debugger': 'warn',
     },
+    globals: {
+        defineProps: 'readonly',
+        defineEmits: 'readonly',
+        defineExpose: 'readonly',
+        withDefaults: 'readonly',
+    },
 };

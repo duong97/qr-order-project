@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import config from '@/config'
-import QrtItem from '@/components/Item.vue'
+import QrtItem from '@/components/QrtItem.vue'
 import { Tabs, Tab, SubmitBar, Tag } from 'vant'
 import { ref, onMounted, defineOptions } from 'vue'
 import { useCartStore } from '@/store/CartStore'
@@ -41,8 +41,8 @@ onMounted(() => {
 
 <template>
     <!-- BEGIN category tabs -->
-    <van-tabs v-model:active="active" scrollspy sticky>
-        <van-tab v-for="category in categoryStore.items" :title="category.name" :name="category.id" :key="category.id">
+    <Tabs v-model:active="active" scrollspy sticky>
+        <Tab v-for="category in categoryStore.items" :title="category.name" :name="category.id" :key="category.id">
             <!-- BEGIN list items group by category -->
             <div class="box">
                 <p class="title is-4">{{ category.name }}</p>
@@ -51,12 +51,12 @@ onMounted(() => {
                 </div>
             </div>
             <!-- END list items group by category -->
-        </van-tab>
-    </van-tabs>
+        </Tab>
+    </Tabs>
     <!-- END category tabs -->
 
     <router-link :to="{ path: '/checkout' }">
-        <van-submit-bar
+        <SubmitBar
             :disabled="!cartStore.hasItems()"
             :price="cartStore.totalAmount() / 10"
             :decimal-length="config.decimalLength"
@@ -65,8 +65,8 @@ onMounted(() => {
             button-type="success"
             label="Tổng tiền"
         >
-            <van-tag size="large" plain type="warning">{{ tableStore.tableName }}</van-tag>
-        </van-submit-bar>
+            <Tag size="large" plain type="warning">{{ tableStore.tableName }}</Tag>
+        </SubmitBar>
     </router-link>
     <!-- END button checkout -->
 </template>

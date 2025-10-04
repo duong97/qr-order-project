@@ -2,8 +2,8 @@ import {createRouter, createWebHistory} from "vue-router";
 import QrtHome from "@/components/QrtHome.vue";
 import QrtCheckout from "@/components/QrtCheckout.vue";
 import QrtLogin from "@/components/QrtLogin.vue";
-import AdminIndex from "@/components/admin/AdIndex.vue";
-import AdminOrder from "@/components/admin/AdOrder.vue";
+import AdminHome from "@/components/admin/QrtAdminHome.vue";
+import AdminOrder from "@/components/admin/QrtOrderList.vue";
 import QrtNotFound from "@/components/QrtNotFound.vue";
 import { useTableStore } from '@/store/TableStore';
 import {useAuthStore} from "@/store/AuthStore";
@@ -46,7 +46,7 @@ const router = createRouter({
         {
             path: '/admin',
             name: 'admin',
-            component: AdminIndex,
+            component: AdminHome,
         },
         {
             path: '/admin/order',

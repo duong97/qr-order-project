@@ -13,8 +13,6 @@ defineOptions({ name: 'qrt-home' })
 
 // state
 const active = ref(1)
-const isShowBannerWelcome = ref(true)
-const qtyAnimation = ref(false)
 
 // stores
 const cartStore = useCartStore()

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
-import { ConfigProvider, Tag, Switch, Icon } from "vant";
+import { ConfigProvider, Tag, Switch } from "vant";
 import { useTableStore } from "@/store/TableStore";
 import { useAuthStore } from "@/store/AuthStore";
 

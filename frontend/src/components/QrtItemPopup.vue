@@ -75,11 +75,6 @@ const totalAmount = computed(() => {
     return total / 10;
 });
 
-// Methods
-function toggleHistory() {
-    isShowHistory.value = !isShowHistory.value;
-}
-
 function reloadOptions() {
     itemOptions.value = config.db.options
         .filter((o: any) => props.item.options?.includes(o.id || 0))

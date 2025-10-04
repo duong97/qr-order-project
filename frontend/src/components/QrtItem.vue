@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Qty from "@/components/Qty.vue";
-import ItemPopup from "@/components/ItemPopup.vue";
+import QrtItemPopup from "@/components/QrtItemPopup.vue";
 import {
     TextEllipsis,
     ActionSheet,
@@ -66,7 +66,7 @@ function onCartVariantQtyDecrease(cartVariant: CartItemVariant) {
 </script>
 
 <template>
-    <ItemPopup
+    <QrtItemPopup
         :item="props.item"
         :isShow="isShowPopup"
         @close="hidePopup"

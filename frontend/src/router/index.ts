@@ -1,10 +1,10 @@
 import {createRouter, createWebHistory} from "vue-router";
 import QrtHome from "@/components/QrtHome.vue";
-import Checkout from "@/components/Checkout.vue";
-import Login from "@/components/Login.vue";
+import QrtCheckout from "@/components/QrtCheckout.vue";
+import QrtLogin from "@/components/QrtLogin.vue";
 import AdminIndex from "@/components/admin/AdIndex.vue";
 import AdminOrder from "@/components/admin/AdOrder.vue";
-import PageNotFound from "@/components/PageNotFound.vue";
+import QrtNotFound from "@/components/QrtNotFound.vue";
 import { useTableStore } from '@/store/TableStore';
 import {useAuthStore} from "@/store/AuthStore";
 
@@ -28,12 +28,12 @@ const router = createRouter({
         },
         {
             path: '/checkout',
-            component: Checkout
+            component: QrtCheckout
         },
         {
             path: '/login',
             name: 'login',
-            component: Login,
+            component: QrtLogin,
             beforeEnter: () => {
                 const authStore = useAuthStore();
                 if (authStore.isLoggedIn) {
@@ -53,7 +53,7 @@ const router = createRouter({
             name: 'admin-order',
             component: AdminOrder,
         },
-        { path: '/:pathMatch(.*)*', component: PageNotFound }
+        { path: '/:pathMatch(.*)*', component: QrtNotFound }
     ]
 });
 

@@ -133,8 +133,8 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
         <Empty v-if="!orders.length" description="Chưa có đơn hàng nào" />
 
         <!-- Show danh sách order -->
-        <div v-else v-animated-list="'fade'">
-            <div v-for="(order, orderIndex) in orders" :key="orderIndex" class="mb-5">
+        <div v-else>
+            <div v-for="(order, orderIndex) in orders" :key="order.id + '_' + order.version" class="mb-5">
                 <CellGroup>
                     <Collapse v-model="activeOrders">
                         <CollapseItem :name="orderIndex">

@@ -54,6 +54,16 @@ async function refreshOrders() {
     });
 }
 
+// Thay thế đơn cũ bằng đơn vừa mới update
+function replaceOrders(updatedOrder: OrderApiResponse) {
+    const index = orders.value.findIndex(o => o.id === updatedOrder.id);
+    if (index !== -1) {
+        orders.value[index] = updatedOrder;
+    } else {
+        orders.value.push(updatedOrder);
+    }
+}
+
 // đóng hết các collapse order button (các nút hiện thêm ngoài nút thao tác chính)
 function collapseAllOrderSubButtons() {
     activeOrders.value = [];
@@ -65,9 +75,9 @@ async function confirmOrder(id?: number|null): Promise<boolean> {
         return false;
     }
     const result = await orderApi.confirm(id);
-    if (result.success) {
+    if (result) {
         showNotify({ type: "success", message: "Đã xác nhận!" });
-        await refreshOrders();
+        replaceOrders(result as OrderApiResponse);
         return true;
     } else {
         showNotify({ type: "danger", message: "Có lỗi xảy ra!" });
@@ -81,15 +91,10 @@ async function completeOrder(id?: number|null): Promise<boolean> {
         return false;
     }
     const result = await orderApi.complete(id);
-    if (result.success) {
+    if (result) {
         showNotify({ type: "success", message: "Đã hoàn thành!" });
 
-        const updatedOrder = result.data as OrderApiResponse;
-        const index = orders.value.findIndex(o => o.id === updatedOrder.id);
-        if (index !== -1) {
-            orders.value[index] = updatedOrder;
-        }
-        await refreshOrders();
+        replaceOrders(result as OrderApiResponse);
         return true;
     } else {
         showNotify({ type: "danger", message: "Có lỗi xảy ra!" });
@@ -103,9 +108,9 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
         return false;
     }
     const result = await orderApi.cancel(id);
-    if (result.success) {
+    if (result) {
         showNotify({ type: "success", message: "Đã hủy!" });
-        await refreshOrders();
+        replaceOrders(result as OrderApiResponse);
         return true;
     } else {
         showNotify({ type: "danger", message: "Có lỗi xảy ra!" });
@@ -138,8 +143,7 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                                 <Tag size="large" type="primary" class="mr-2">
                                     {{ order.table.code || "Table" }}
                                 </Tag>
-                                <b class="is-size-6 mr-1">{{ '#' + (orderIndex + 1) + '. ' }}</b>
-                                <b class="is-size-6">{{ order.table.name }}</b>
+                                <b class="is-size-6">{{ order.code }}</b>
                             </template>
                             <template #value>
                                 <Tag plain size="large" :type="order.tagType" class="mr-2">

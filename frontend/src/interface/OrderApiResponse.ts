@@ -14,6 +14,7 @@ export default interface OrderApiResponse {
     tableId?: number|null,
     table?: Table|null,
     totalAmount?: number|null,
+    version?: number|null,
     details?: OrderDetailApiResponse[]|null,
 
     isNew?: boolean,

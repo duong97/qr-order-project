@@ -41,6 +41,8 @@ orderStore.connect();
 // @todo refactor api in service without use repository
 // @todo handle list status and payment status
 // @todo handle confirm order, complete order, cancel order...
+// @doing xử lý lưu thêm cột version trong table order, khi confirm / complete.. order thì gắn key là index + version để trigger animation
+// tìm hiểu thêm optimic lock
 
 // Load lại list order
 async function refreshOrders() {

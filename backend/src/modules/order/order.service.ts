@@ -1,19 +1,12 @@
 import {BaseService} from '@/core/base/base.service';
 import {OrderRepository} from './order.repository';
 import {OrderInput} from "@/modules/order/order.validator";
-import {ORDER_STATUSES, PAYMENT_STATUSES} from "@/core/const/default";
+import {ORDER_SCENARIOS, ORDER_STATUSES, PAYMENT_STATUSES} from "@/core/const/default";
+import {OrderModel} from "@/modules/order/order.model";
 
 export class OrderService extends BaseService<OrderRepository> {
     constructor() {
         super(new OrderRepository());
-    }
-
-    async create(data: any) {
-        return this.repository.create(data);
-    }
-
-    async update(id: number, data: any) {
-        return this.repository.update(id, data);
     }
 
     async createOrder(orderInput: OrderInput) {
@@ -30,8 +23,6 @@ export class OrderService extends BaseService<OrderRepository> {
                     productOptions: _variant.itemOptions || null,
                 }
                 orderDetails.push(_orderDetail);
-
-                console.log('orderDetail: ', _variant.itemOptions);
             }
         }
 
@@ -44,28 +35,50 @@ export class OrderService extends BaseService<OrderRepository> {
             },
         };
 
-        console.log('create order data: ', {
-            data: orderData,
-            include: {
-                details: true
-            }
-        })
-        return this.repository.create(orderData, { details: true });
+        return this.create(orderData, { details: true });
     }
 
     generateOrderCode() {
         return Math.floor(10000 + Math.random() * 90000);
     }
 
-    async confirm(id: number, include: any = {}) {
-        return this.repository.update(id, { orderStatus: ORDER_STATUSES.PROCESSING }, include);
+    async confirm(orderId: number, updatedBy: number|null = null) {
+        const include = OrderModel.getRelations(ORDER_SCENARIOS.LIST);
+        return this.update(
+            orderId,
+            {
+                orderStatus: ORDER_STATUSES.PROCESSING,
+                updatedBy,
+                version: { increment: 1 }
+            },
+            include
+        );
     }
 
-    async complete(id: number, include: any = {}) {
-        return this.repository.update(id, { orderStatus: ORDER_STATUSES.COMPLETED, paymentStatus: PAYMENT_STATUSES.PAID }, include);
+    async complete(orderId: number, updatedBy: number|null = null) {
+        const include = OrderModel.getRelations(ORDER_SCENARIOS.LIST);
+        return this.update(
+            orderId,
+            {
+                orderStatus: ORDER_STATUSES.COMPLETED,
+                paymentStatus: PAYMENT_STATUSES.PAID,
+                updatedBy,
+                version: { increment: 1 }
+            },
+            include
+        );
     }
 
-    async cancel(id: number, include: any = {}) {
-        return this.repository.update(id, { orderStatus: ORDER_STATUSES.CANCELLED }, include);
+    async cancel(orderId: number, updatedBy: number|null = null) {
+        const include = OrderModel.getRelations(ORDER_SCENARIOS.LIST);
+        return this.update(
+            orderId,
+            {
+                orderStatus: ORDER_STATUSES.CANCELLED,
+                updatedBy,
+                version: { increment: 1 }
+            },
+            include
+        );
     }
 }

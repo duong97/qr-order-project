@@ -23,6 +23,8 @@ export const OrderSchema = z.object({
     customerName: BaseValidator.mustBeString(),
     note: BaseValidator.mustBeString(),
     items: z.array(OrderProductSchema).optional(),
+    createdBy: BaseValidator.mustBeNumber(),
+    updatedBy: BaseValidator.mustBeNumber(),
 });
 
 export type OrderInput = z.infer<typeof OrderSchema>;

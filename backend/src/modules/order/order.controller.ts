@@ -60,41 +60,35 @@ export class OrderController extends BaseController<OrderService> {
     };
 
     confirm = async (req: Request, res: Response, next: NextFunction) => {
-        const id = +req.params.id;
-        const scenario = ORDER_SCENARIOS.LIST;
-        const includeRelations = OrderModel.getRelations(scenario);
+        const orderId = +req.params.id;
 
         // Confirm order
-        const orderUpdated = await this.service.confirm(id, includeRelations);
+        const orderUpdated = await this.service.confirm(orderId, req.currentUser?.id);
 
         // Return data with format
         const orderModel = new OrderModel(orderUpdated);
-        res.status(200).json({ success: true, data: orderModel.toJSON(scenario) });
+        res.status(200).json({ success: true, data: orderModel.toJSON(ORDER_SCENARIOS.LIST) });
     }
 
     complete = async (req: Request, res: Response, next: NextFunction) => {
-        const id = +req.params.id;
-        const scenario = ORDER_SCENARIOS.LIST;
-        const includeRelations = OrderModel.getRelations(scenario);
+        const orderId = +req.params.id;
 
         // Complete order
-        const orderUpdated = await this.service.complete(id, includeRelations);
+        const orderUpdated = await this.service.complete(orderId, req.currentUser?.id);
 
         // Return data with format
         const orderModel = new OrderModel(orderUpdated);
-        res.status(200).json({ success: true, data: orderModel.toJSON(scenario) });
+        res.status(200).json({ success: true, data: orderModel.toJSON(ORDER_SCENARIOS.LIST) });
     }
 
     cancel = async (req: Request, res: Response, next: NextFunction) => {
-        const id = +req.params.id;
-        const scenario = ORDER_SCENARIOS.LIST;
-        const includeRelations = OrderModel.getRelations(scenario);
+        const orderId = +req.params.id;
 
         // Cancel order
-        const orderUpdated = await this.service.cancel(id, includeRelations);
+        const orderUpdated = await this.service.cancel(orderId, req.currentUser?.id);
 
         // Return data with format
         const orderModel = new OrderModel(orderUpdated);
-        res.status(200).json({ success: true, data: orderModel.toJSON(scenario) });
+        res.status(200).json({ success: true, data: orderModel.toJSON(ORDER_SCENARIOS.LIST) });
     }
 }

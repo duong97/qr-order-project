@@ -15,12 +15,12 @@ export class BaseService<TRepository extends BaseRepository<any>> {
         return this.repository.findById(id);
     }
 
-    async create(data: any) {
-        return this.repository.create(data);
+    async create(data: any, include: any = {}) {
+        return this.repository.create(data, include);
     }
 
-    async update(id: number, data: any) {
-        return this.repository.update(id, data);
+    async update(id: number, data: any, include: any = {}) {
+        return this.repository.update(id, data, include);
     }
 
     async delete(id: number) {

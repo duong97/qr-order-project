@@ -18,9 +18,11 @@ import {
     CollapseItem,
     showNotify,
 } from "vant";
+import {initOrderSocket} from "@/plugin/orderSocket";
 
 const userApi = new UserApi();
 const orderApi = new OrderApi();
+const orderStore = useOrderStore();
 
 // Check user login
 userApi.currentUserInfo();
@@ -28,14 +30,11 @@ userApi.currentUserInfo();
 const orders = ref<OrderApiResponse[]>([]);
 onMounted(() => {
     refreshOrders();
+    initOrderSocket();
 });
 
 // Dùng để toggle các button phụ của đơn hàng
 const activeOrders = ref<number[]>([]);
-
-const orderStore = useOrderStore();
-orderStore.connect();
-
 
 // @todo refactor vue 3 use script setup
 // @todo refactor api in service without use repository
@@ -46,12 +45,10 @@ orderStore.connect();
 
 // Load lại list order
 async function refreshOrders() {
-    orderApi.list().then((_orders: OrderApiResponse[]) => {
-        orders.value = _orders;
-
-        // Sau khi load lại thì reset trạng thái các buttons
-        collapseAllOrderSubButtons();
+    orderStore.fetchOrders().then(() => {
+        orders.value = orderStore.orders;
     });
+    collapseAllOrderSubButtons();
 }
 
 // Thay thế đơn cũ bằng đơn vừa mới update

@@ -1,49 +1,21 @@
 import { defineStore } from "pinia";
-import socket from "@/plugin/socket";
+import OrderApiResponse from "@/interface/OrderApiResponse";
+import {OrderApi} from "@/api/admin/OrderApi";
 
-interface Order {
-    id: string;
-    userId: string;
-    total: number;
-}
-
-// Event name
-const EVENT_SOCKET_CONNECTED = "connect";
-const EVENT_JOIN_ORDER = "join:order";
-const EVENT_ORDER_NEW = "order:new";
+const adminOrderApi = new OrderApi();
 
 export const useOrderStore = defineStore("order", {
     state: () => ({
-        orders: [] as Order[],
+        orders: [] as OrderApiResponse[],
         connected: false,
     }),
 
     actions: {
-        connect() {
-            if (!socket.connected) {
-                socket.connect();
-
-                // join room order
-                socket.emit(EVENT_JOIN_ORDER);
-
-                // Sau khi kết nối thành công
-                socket.on(EVENT_SOCKET_CONNECTED, () => {
-                    this.connected = true;
-                });
-
-                // check has a new order
-                socket.on(EVENT_ORDER_NEW, (data: Order) => {
-                    this.orders.push(data);
-                });
-            }
+        async fetchOrders() {
+            this.orders = await adminOrderApi.list();
         },
-
-        disconnect() {
-            if (this.connected) {
-                socket.off(EVENT_ORDER_NEW);
-                socket.disconnect();
-                this.connected = false;
-            }
+        addOrder(order: OrderApiResponse) {
+            this.orders.push(order);
         },
     },
 });

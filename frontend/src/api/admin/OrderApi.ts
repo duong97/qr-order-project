@@ -19,9 +19,9 @@ export class OrderApi extends BaseAdminApi {
         return order;
     }
 
-    async list() {
+    async list(filter?: any) {
         this.path = '/admin/orders';
-        const orders = await super.list();
+        const orders = await super.list(filter);
         return orders.map((order: OrderApiResponse) => {
             return this.formatOrder(order);
         }) as OrderApiResponse[];

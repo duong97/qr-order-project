@@ -13,16 +13,17 @@ export class OrderController extends BaseController<OrderService> {
         try {
             const scenario = ORDER_SCENARIOS.LIST;
 
+            const queryStatus = String(req.query?.status || '');
+            let filterStatus = queryStatus?.split(',').map(Number);
+
             const queryParams = {
                 where: {
-                    OR: [
-                        { orderStatus: { notIn: [ORDER_STATUSES.CANCELLED, ORDER_STATUSES.COMPLETED] } },
-                        { orderStatus: null },
-                    ],
+                    orderStatus: {in: filterStatus?.length ? filterStatus : ORDER_STATUSES.NEW}
                 }
             } as any;
             queryParams.include = OrderModel.getRelations(scenario);
             queryParams.orderBy = { id: 'desc' }
+            console.log('queryParams', JSON.stringify(queryParams));
             const data = await this.service.getAll(queryParams);
             const orders = data.map(order => {
                 const orderModel = new OrderModel(order);

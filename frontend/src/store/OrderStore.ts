@@ -7,11 +7,17 @@ const adminOrderApi = new OrderApi();
 export const useOrderStore = defineStore("order", {
     state: () => ({
         orders: [] as OrderApiResponse[],
+        ordersByStatus: {} as any,
     }),
 
     actions: {
-        async fetchOrders() {
-            this.orders = await adminOrderApi.list();
+        // @todo xử lý lại các chỗ dùng orders -> lấy theo orderByStatus
+        async fetchOrders(status?: number) {
+            if (status !== undefined) {
+                this.ordersByStatus[status] = await adminOrderApi.list({ status });
+            } else {
+                this.orders = await adminOrderApi.list({ status });
+            }
         },
         addOrder(order: OrderApiResponse) {
             this.orders.unshift(order);

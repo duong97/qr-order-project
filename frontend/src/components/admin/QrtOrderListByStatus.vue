@@ -163,9 +163,8 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                             v-for="(_orderDetail, itemIndex) in order.details || []"
                             :key="itemIndex"
                         >
-                            <Grid :column-num="3">
-                                <GridItem :text="_orderDetail.product.name" />
-                                <GridItem :text="'SL: ' + _orderDetail.qty" />
+                            <Grid :column-num="2">
+                                <GridItem :text="_orderDetail.qty + ' x ' + _orderDetail.product.name" />
                                 <GridItem :text="formatCurrency(_orderDetail.price)" />
                             </Grid>
                             <p

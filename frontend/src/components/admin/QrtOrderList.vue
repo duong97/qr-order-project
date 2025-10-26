@@ -30,7 +30,7 @@ onMounted(() => {
         <!-- Title -->
         <h4 class="title has-text-centered">Quản lý order</h4>
 
-        <Tabs animated swipe-threshold="3">
+        <Tabs animated swipe-threshold="3" sticky>
             <Tab :title="status.label" :key="status.id" v-for="status in TAB_LIST">
                 <QrtOrderListByStatus :status="status.id" :key="status.label"/>
             </Tab>

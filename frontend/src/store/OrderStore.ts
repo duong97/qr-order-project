@@ -1,26 +1,38 @@
 import { defineStore } from "pinia";
 import OrderApiResponse from "@/interface/OrderApiResponse";
 import {OrderApi} from "@/api/admin/OrderApi";
+import {ORDER_STATUSES} from "@/const/default";
 
 const adminOrderApi = new OrderApi();
+interface OrderByStatus {
+    statusId: number;
+    orders: OrderApiResponse[];
+}
 
 export const useOrderStore = defineStore("order", {
     state: () => ({
-        orders: [] as OrderApiResponse[],
-        ordersByStatus: {} as any,
+        ordersByStatus: [] as OrderByStatus[],
     }),
 
     actions: {
-        // @todo xử lý lại các chỗ dùng orders -> lấy theo orderByStatus
         async fetchOrders(status?: number) {
             if (status !== undefined) {
-                this.ordersByStatus[status] = await adminOrderApi.list({ status });
-            } else {
-                this.orders = await adminOrderApi.list({ status });
+                const _orders = {
+                    statusId: status,
+                    orders: await adminOrderApi.list({ status })
+                }
+                // Remove old list
+                this.ordersByStatus = this.ordersByStatus.filter((o) => o.statusId !== status);
+                // Insert new list
+                this.ordersByStatus.push(_orders);
             }
         },
         addOrder(order: OrderApiResponse) {
-            this.orders.unshift(order);
+            const _orderStatus = order.orderStatus || ORDER_STATUSES.NEW
+            const _ordersByStatus = this.ordersByStatus.find(o => o.statusId === _orderStatus);
+            if (_ordersByStatus !== undefined) {
+                _ordersByStatus.orders.unshift(order); // thêm vào đầu danh sách
+            }
         },
         async confirmOrder(id?: number|null) {
             if (!id) {
@@ -59,12 +71,12 @@ export const useOrderStore = defineStore("order", {
             }
         },
         replaceOrders(updatedOrder: OrderApiResponse) {
-            const index = this.orders.findIndex(o => o.id === updatedOrder.id);
-            if (index !== -1) {
-                this.orders[index] = updatedOrder;
-            } else {
-                this.orders.push(updatedOrder);
+            // Remove old order
+            for (const _orderByStatus of this.ordersByStatus) {
+                _orderByStatus.orders = _orderByStatus.orders.filter(o => o.id !== updatedOrder.id);
             }
+            // Add new order
+            this.addOrder(updatedOrder);
         }
     },
 });

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted, getCurrentInstance} from "vue";
+import {ref, onMounted} from "vue";
 import { useOrderStore } from "@/store/OrderStore";
 import { UserApi } from "@/api/admin/UserApi";
 import {formatDate, formatCurrency} from "@/utils/format";
@@ -27,9 +27,7 @@ const orderStore = useOrderStore();
 // Check user login
 userApi.currentUserInfo();
 
-const instance = getCurrentInstance()
 onMounted(() => {
-    console.log('mounted component with status: ' + props.status, 'node key: ', instance?.vnode.key);
     orderStore.fetchOrders(props.status);
     collapseAllOrderSubButtons();
 });
@@ -90,12 +88,12 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
 
 <template>
     <!-- Empty component -->
-    <Empty v-if="!orderStore.ordersByStatus[props.status]?.length" description="Chưa có đơn hàng nào" />
+    <Empty v-if="!orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders?.length" description="Chưa có đơn hàng nào" />
 
     <!-- Show danh sách order -->
     <div v-else>
         <TransitionGroup name="list" tag="div">
-            <div v-for="(order, orderIndex) in orderStore.ordersByStatus[props.status]" :key="order.id + '_' + order.version" class="mb-5">
+            <div v-for="(order, orderIndex) in orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mb-5">
                 <CellGroup>
                     <Collapse v-model="activeOrders">
                         <CollapseItem :name="orderIndex">

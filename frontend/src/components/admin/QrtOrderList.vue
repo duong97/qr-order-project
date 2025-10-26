@@ -7,12 +7,13 @@ import {
 } from "vant";
 import {initOrderSocket} from "@/plugin/orderSocket";
 import QrtOrderListByStatus from "@/components/admin/QrtOrderListByStatus.vue";
+import { ORDER_STATUSES } from "@/const/default";
 
-const ORDER_STATUSES = [
-    { id: 0, label: 'Mới' },
-    { id: 1, label: 'Đang thực hiện' },
-    { id: 2, label: 'Đã hoàn thành' },
-    { id: 3, label: 'Đã hủy' },
+const TAB_LIST = [
+    { id: ORDER_STATUSES.NEW, label: 'Mới' },
+    { id: ORDER_STATUSES.PROCESSING, label: 'Đang thực hiện' },
+    { id: ORDER_STATUSES.COMPLETED, label: 'Đã hoàn thành' },
+    { id: ORDER_STATUSES.CANCELLED, label: 'Đã hủy' },
 ]
 const userApi = new UserApi();
 
@@ -30,7 +31,7 @@ onMounted(() => {
         <h4 class="title has-text-centered">Quản lý order</h4>
 
         <Tabs animated swipe-threshold="3">
-            <Tab :title="status.label" :key="status.id" v-for="status in ORDER_STATUSES">
+            <Tab :title="status.label" :key="status.id" v-for="status in TAB_LIST">
                 <QrtOrderListByStatus :status="status.id" :key="status.label"/>
             </Tab>
         </Tabs>

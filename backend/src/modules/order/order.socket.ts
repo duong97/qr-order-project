@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import {SOCKET_ROOMS} from "@/core/const/default";
+import {SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
 import {AuthenticatedSocket} from "@/core/middleware/socketAuth";
 
 const roomOrder = SOCKET_ROOMS.ORDER;

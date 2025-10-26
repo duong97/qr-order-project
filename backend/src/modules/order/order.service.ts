@@ -35,7 +35,8 @@ export class OrderService extends BaseService<OrderRepository> {
             },
         };
 
-        return this.create(orderData, { details: true });
+        const include = OrderModel.getRelations(ORDER_SCENARIOS.LIST);
+        return this.create(orderData, include);
     }
 
     generateOrderCode() {

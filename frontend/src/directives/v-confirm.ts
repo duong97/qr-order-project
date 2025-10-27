@@ -17,8 +17,8 @@ export default {
                 await showConfirmDialog({
                     title: "Xác nhận",
                     message,
-                    confirmButtonText: "Đồng ý",
-                    cancelButtonText: "Hủy",
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Bỏ qua",
                 });
 
                 // Người dùng đồng ý → call lại event click

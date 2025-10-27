@@ -84,6 +84,7 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
         return false;
     }
 }
+// @todo update UI order list with design in https://app.uizard.io/prototypes/8XqOxnJ0Obund9Q1VQ1l
 </script>
 
 <template>
@@ -93,70 +94,18 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
     <!-- Show danh sách order -->
     <div v-else>
         <TransitionGroup name="list" tag="div">
-            <div v-for="(order, orderIndex) in orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mb-5">
+            <div v-for="(order) in orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mb-5">
                 <CellGroup>
-                    <Collapse v-model="activeOrders">
-                        <CollapseItem :name="orderIndex">
-<!--                            Order title...-->
-                            <template #title>
-                                <Tag size="large" type="primary" class="mr-2">
-                                    {{ order.table.code || "Table" }}
-                                </Tag>
-                                <b class="is-size-6">{{ order.code }}</b>
-                            </template>
-                            <template #value>
-                                <Tag plain size="large" :type="order.tagType" class="mr-2">
-                                    {{ order.orderStatusLabel }}
-                                </Tag>
-                            </template>
-
-<!--                            Order buttons-->
-                            <div class="p-2">
-                                <Row justify="end">
-                                    <div>
-                                        <Button v-if="order.canCancel"
-                                                @click="cancelOrder(order.id)"
-                                                type="danger"
-                                                size="small"
-                                                icon="cross"
-                                                icon-position="right"
-                                                v-confirm="'Xác nhận hoàn thành đơn hàng'"
-                                        >
-                                            Hủy
-                                        </Button>
-                                    </div>
-                                </Row>
-                            </div>
-                        </CollapseItem>
-                    </Collapse>
                     <Cell>
-                        <Row justify="space-between">
-                            <div>
-                                {{ formatDate(order.createdAt) }}
-                            </div>
-                            <div>
-                                <Button v-if="order.canComplete && !order.isNew"
-                                        @click="completeOrder(order.id)"
-                                        type="success"
-                                        size="small"
-                                        class="mr-2"
-                                        icon="success"
-                                        icon-position="right"
-                                        v-confirm="'Xác nhận hoàn thành đơn hàng'"
-                                >
-                                    Hoàn thành
-                                </Button>
-                                <Button v-if="order.isNew"
-                                        @click="confirmOrder(order.id)"
-                                        type="primary" size="small"
-                                        class="mr-2"
-                                        icon="good-job-o"
-                                        icon-position="right"
-                                >
-                                    Xác nhận
-                                </Button>
-                            </div>
-                        </Row>
+                        <template #title>
+                            <Tag size="large" type="primary" class="mr-2">
+                                {{ order.table.code || "Table" }}
+                            </Tag>
+                            <b class="is-size-6">{{ order.code }}</b>
+                        </template>
+                        <template #value>
+                            {{ formatDate(order.createdAt) }}
+                        </template>
                     </Cell>
                     <Cell>
                         <div
@@ -182,6 +131,44 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                                 </span>
                             </p>
                         </div>
+                    </Cell>
+                    <Cell>
+                        <Row justify="end">
+                            <div>
+                                <Button v-if="order.canCancel"
+                                        @click="cancelOrder(order.id)"
+                                        type="danger"
+                                        size="small"
+                                        icon="cross"
+                                        plain
+                                        icon-position="right"
+                                        v-confirm="'HỦY đơn hàng này?'"
+                                        class="mr-2"
+                                >
+                                    Hủy
+                                </Button>
+                                <Button v-if="order.canComplete && !order.isNew"
+                                        @click="completeOrder(order.id)"
+                                        type="success"
+                                        size="small"
+                                        class="mr-2"
+                                        icon="success"
+                                        icon-position="right"
+                                        v-confirm="'HOÀN THÀNH đơn hàng này?'"
+                                >
+                                    Hoàn thành
+                                </Button>
+                                <Button v-if="order.isNew"
+                                        @click="confirmOrder(order.id)"
+                                        type="primary" size="small"
+                                        class="mr-2"
+                                        icon="good-job-o"
+                                        icon-position="right"
+                                >
+                                    Xác nhận
+                                </Button>
+                            </div>
+                        </Row>
                     </Cell>
                 </CellGroup>
             </div>

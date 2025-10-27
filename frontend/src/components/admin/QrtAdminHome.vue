@@ -4,6 +4,7 @@ import { useRouter } from "vue-router";
 import QrtAdminProductList from "@/components/admin/QrtProductList.vue";
 import QrtAdminCategoryList from "@/components/admin/QrtCategoryList.vue";
 import QrtAdminProductOptionList from "@/components/admin/QrtProductOptionList.vue";
+import QrtTableList from "@/components/admin/QrtTableList.vue";
 import { useAuthStore } from "@/store/AuthStore";
 
 const authStore = useAuthStore();
@@ -44,6 +45,9 @@ const logout = async () => {
             </Tab>
             <Tab title="Tùy chọn" :key="3">
                 <QrtAdminProductOptionList />
+            </Tab>
+            <Tab title="Bàn" :key="4">
+                <QrtTableList />
             </Tab>
         </Tabs>
     </div>

@@ -11,6 +11,8 @@ import {OptionController} from "@/modules/option/option.controller";
 import {OptionValidator} from "@/modules/option/option.validator";
 import {OrderController} from "@/modules/order/order.controller";
 import {OrderValidator} from "@/modules/order/order.validator";
+import {TableController} from "@/modules/table/table.controller";
+import {TableValidator} from "@/modules/table/table.validator";
 
 const adminRouter = Router();
 adminRouter.use(authMiddleware);
@@ -28,7 +30,9 @@ adminRouter.post('/admin/orders/:id/confirm', orderController.confirm?.bind(orde
 adminRouter.post('/admin/orders/:id/complete', orderController.complete?.bind(orderController));
 adminRouter.post('/admin/orders/:id/cancel', orderController.cancel?.bind(orderController));
 
+// --- Main router (CRUD) ---
 const routes = [
+    {path: '/tables', controller: new TableController(), validator: new TableValidator()},
     {path: '/categories', controller: new CategoryController(), validator: new CategoryValidator()},
     {path: '/products', controller: new ProductController(), validator: new ProductValidator()},
     {path: '/options', controller: new OptionController(), validator: new OptionValidator()},

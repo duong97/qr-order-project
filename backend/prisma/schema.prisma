@@ -8,108 +8,119 @@ datasource db {
 }
 
 model Category {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
-  createdBy   Int?
+  createdBy Int?
 
   // Relations
-  products  Product[]  @relation("ProductCategories")
+  products Product[] @relation("ProductCategories")
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   name        String
-  price       Int @default(0)
+  price       Int      @default(0)
   description String?
   thumbnail   String?
   createdAt   DateTime @default(now())
   createdBy   Int?
 
   // Relations
-  categories  Category[]  @relation("ProductCategories")
-  options     Option[] @relation("ProductOptions")
-  orderDetails  OrderDetail[]
+  categories   Category[]    @relation("ProductCategories")
+  options      Option[]      @relation("ProductOptions")
+  orderDetails OrderDetail[]
 }
 
 model Option {
-  id          Int @id @default(autoincrement())
-  name        String
-  multiple    Boolean @default(false)
-  items       Json?
-  createdAt   DateTime @default(now())
-  createdBy   Int?
+  id        Int      @id @default(autoincrement())
+  name      String
+  multiple  Boolean  @default(false)
+  items     Json?
+  createdAt DateTime @default(now())
+  createdBy Int?
 
   // Relations
-  products    Product[] @relation("ProductOptions")
+  products Product[] @relation("ProductOptions")
 }
 
 model User {
-  id          Int     @id @default(autoincrement())
-  username    String
-  password    String
-  createdAt   DateTime @default(now())
-  createdBy   Int?
+  id        Int      @id @default(autoincrement())
+  username  String
+  password  String
+  createdAt DateTime @default(now())
+  createdBy Int?
 
   // Relations
-  roles       Role[] @relation("UserRoles")
+  roles Role[] @relation("UserRoles")
 }
 
 model Role {
-  id          Int     @id @default(autoincrement())
-  name        String
-  createdAt   DateTime @default(now())
-  createdBy   Int?
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  createdBy Int?
 
   // Relations
-  users       User[] @relation("UserRoles")
+  users User[] @relation("UserRoles")
 }
 
 model Table {
-  id          Int     @id @default(autoincrement())
-  code        String
-  name        String
-  createdAt   DateTime @default(now())
-  createdBy   Int?
+  id        Int      @id @default(autoincrement())
+  code      String
+  name      String
+  createdAt DateTime @default(now())
+  createdBy Int?
 
   // Relations
-  orders    Order[]
+  orders Order[]
 }
 
 model Order {
-  id          Int     @id @default(autoincrement())
-  code        String?
-  tableId     Int @default(0)
-  totalAmount Int @default(0)
-  note        String?
-  orderStatus Int? @default(0)
-  paymentStatus   Int? @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now())
-  createdBy   Int?
-  updatedBy   Int?
-  version     Int? @default(1)
+  id            Int      @id @default(autoincrement())
+  code          String?
+  tableId       Int      @default(0)
+  totalAmount   Int      @default(0)
+  note          String?
+  orderStatus   Int?     @default(0)
+  paymentStatus Int?     @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  createdBy     Int?
+  updatedBy     Int?
+  version       Int?     @default(1)
 
   // Relations
-  details     OrderDetail[]
-  table       Table @relation(fields: [tableId], references: [id])
+  details OrderDetail[]
+  table   Table         @relation(fields: [tableId], references: [id])
 }
 
 model OrderDetail {
-  id          Int     @id @default(autoincrement())
-  orderId     Int
-  productId   Int
-  productOptions  Json?
-  qty         Int @default(0)
-  price       Int @default(0)
-  totalAmount Int @default(0)
-  note        String?
-  createdAt   DateTime @default(now())
-  createdBy   Int?
+  id             Int      @id @default(autoincrement())
+  orderId        Int
+  productId      Int
+  productOptions Json?
+  qty            Int      @default(0)
+  price          Int      @default(0)
+  totalAmount    Int      @default(0)
+  note           String?
+  createdAt      DateTime @default(now())
+  createdBy      Int?
 
   // Relations
-  order     Order    @relation(fields: [orderId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model CallRequest {
+  id         Int      @id @default(autoincrement())
+  tableId    Int
+  type       Int
+  status     Int
+  note       String
+  assignedTo Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 // @todo add order funtion

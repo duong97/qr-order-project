@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export abstract class BaseValidator {
     onCreate = z.object({})
+    onCreateMultiple = z.array(this.onCreate)
     onUpdate = z.object({})
     onDelete = z.object({})
 

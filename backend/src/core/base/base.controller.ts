@@ -33,9 +33,28 @@ export abstract class BaseController<TService> {
         try {
             const bodyData = req.body;
             bodyData.createdBy = req.currentUser?.id;
-            console.log('create data', bodyData)
             const data = await (this.service as any).create(bodyData);
             res.status(201).json({ success: true, data });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    // POST /resource
+    createMultiple = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const bodyData = req.body;
+            if (!Array.isArray(bodyData)) {
+                return res.status(400).json({ success: false, message: 'Invalid data format' });
+            }
+
+            const result = [];
+            for (const item of bodyData) {
+                item.createdBy = req.currentUser?.id;
+                const _createdData = await (this.service as any).create(bodyData);
+                result.push(_createdData);
+            }
+            res.status(201).json({ success: true, data: result });
         } catch (err) {
             next(err);
         }

@@ -47,6 +47,7 @@ for (const route of routes) {
     // CRUD router
     adminRouter.get(basePath, controller.index?.bind(controller));
     adminRouter.get(basePath + '/:id', controller.show?.bind(controller));
+    adminRouter.post(basePath + '/multiple', [validate(validator.onCreateMultiple)], controller.createMultiple?.bind(controller));
     adminRouter.post(basePath, [validate(validator.onCreate)], controller.store?.bind(controller));
     adminRouter.put(basePath + '/:id', [validate(validator.onUpdate)], controller.update?.bind(controller));
     adminRouter.delete(basePath + '/:id', [validate(validator.onDelete)], controller.destroy?.bind(controller));

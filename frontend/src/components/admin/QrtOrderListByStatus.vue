@@ -2,7 +2,7 @@
 import {ref, onMounted} from "vue";
 import { useOrderStore } from "@/store/OrderStore";
 import { UserApi } from "@/api/admin/UserApi";
-import {formatDate, formatCurrency} from "@/utils/format";
+import {formatTime, formatCurrency} from "@/utils/format";
 import {
     Cell,
     CellGroup,
@@ -94,7 +94,7 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
     <!-- Show danh sách order -->
     <div v-else>
         <TransitionGroup name="list" tag="div">
-            <div v-for="(order) in orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mb-5">
+            <div v-for="(order) in orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mt-3">
                 <CellGroup>
                     <Cell>
                         <template #title>
@@ -104,7 +104,7 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                             <b class="is-size-6">{{ order.code }}</b>
                         </template>
                         <template #value>
-                            {{ formatDate(order.createdAt) }}
+                            {{ 'Lúc ' + formatTime(order.createdAt) }}
                         </template>
                     </Cell>
                     <Cell>
@@ -112,24 +112,25 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
                             v-for="(_orderDetail, itemIndex) in order.details || []"
                             :key="itemIndex"
                         >
-                            <Grid :column-num="2">
-                                <GridItem :text="_orderDetail.qty + ' x ' + _orderDetail.product.name" />
-                                <GridItem :text="formatCurrency(_orderDetail.price)" />
-                            </Grid>
-                            <p
-                                v-for="_productOpt in _orderDetail.productOptions || []"
-                                :key="_productOpt.id"
+                            <Cell
+                                :title="_orderDetail.qty + ' x ' + _orderDetail.product.name"
+                                :value="formatCurrency(_orderDetail.price)"
                             >
-                                {{ _productOpt.name }}:
-                                <span v-for="optItem in _productOpt.items" :key="optItem.id">
-                                  <span>
-                                    {{ optItem.name }}
-                                    <span v-if="optItem.price > 0">
-                                      (+{{ formatCurrency(optItem.price) }})
-                                    </span>
-                                  </span>
-                                </span>
-                            </p>
+                                <template #label>
+                                    <p
+                                        v-for="_productOpt in _orderDetail.productOptions || []"
+                                        :key="_productOpt.id"
+                                    >
+                                        {{ _productOpt.name }}:
+                                        <span v-for="optItem in _productOpt.items" :key="optItem.id">
+                                            {{ optItem.name }}
+                                            <span v-if="optItem.price > 0">
+                                              (+{{ formatCurrency(optItem.price) }})
+                                            </span>
+                                        </span>
+                                    </p>
+                                </template>
+                            </Cell>
                         </div>
                     </Cell>
                     <Cell>

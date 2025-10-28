@@ -7,6 +7,7 @@ import { useCartStore } from '@/store/CartStore'
 import { useTableStore } from '@/store/TableStore'
 import { useProductStore } from '@/store/ProductStore'
 import { useCategoryStore } from '@/store/CategoryStore'
+import QrtRequest from "@/components/QrtRequest.vue";
 
 // Optional: preserve component name for devtools/keep-alive
 defineOptions({ name: 'qrt-home' })
@@ -67,6 +68,8 @@ onMounted(() => {
         </SubmitBar>
     </router-link>
     <!-- END button checkout -->
+
+    <QrtRequest></QrtRequest>
 </template>
 
 <style scoped>

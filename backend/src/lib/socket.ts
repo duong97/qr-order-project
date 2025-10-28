@@ -1,5 +1,6 @@
 import {Server} from "socket.io";
 import {registerOrderSocket} from "@/modules/order/order.socket";
+import {registerRequestSocket} from "@/modules/request/request.socket";
 import {AuthenticatedSocket, socketAuthMiddleware} from "@/core/middleware/socketAuth";
 
 let io: Server;
@@ -16,6 +17,7 @@ export const initSocket = (httpServer: any) => {
         console.log(`⚡ Client connected: user ${socket.user?.id} - ${socket.user?.username}`);
 
         registerOrderSocket(io, socket);
+        registerRequestSocket(io, socket);
 
         socket.on("disconnect", () => {
             console.log(`❌ Client disconnected: ${socket.id}`);

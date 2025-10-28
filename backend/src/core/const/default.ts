@@ -1,12 +1,14 @@
 // Socket room name
 export const SOCKET_ROOMS = {
     ORDER: "order",
+    REQUEST: "request",
 } as const;
 export type SocketRoom = typeof SOCKET_ROOMS[keyof typeof SOCKET_ROOMS];
 
 // Socket room name
 export const SOCKET_EVENTS = {
     ORDER_NEW: "order:new",
+    REQUEST_NEW: "request:new",
 } as const;
 export type SocketEvent = typeof SOCKET_EVENTS[keyof typeof SOCKET_EVENTS];
 

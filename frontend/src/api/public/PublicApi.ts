@@ -1,5 +1,6 @@
 import {BaseApi} from "@/api/BaseApi";
 import OrderSubmit from "@/interface/OrderSubmit";
+import CreateRequest from "@/interface/CreateRequest";
 
 export class PublicApi extends BaseApi{
     constructor() {
@@ -21,6 +22,12 @@ export class PublicApi extends BaseApi{
     async submitOrder(order: OrderSubmit) {
         this.path = '/public/orders';
         const response = await this.axiosInstance.post(this.path, order);
+        return response?.data;
+    }
+
+    async createRequest(request: CreateRequest) {
+        this.path = '/public/requests';
+        const response = await this.axiosInstance.post(this.path, request);
         return response?.data;
     }
 }

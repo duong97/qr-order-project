@@ -54,4 +54,13 @@ export class PublicController {
             next(err);
         }
     };
+
+    createRequest = async (req: TypedRequest<OrderInput>, res: Response, next: NextFunction) => {
+        try {
+            const data = await this.service.createRequest(req.body);
+            res.json({success: true, data});
+        } catch (err) {
+            next(err);
+        }
+    };
 }

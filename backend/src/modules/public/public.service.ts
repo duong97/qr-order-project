@@ -5,6 +5,8 @@ import {getIO} from "@/lib/socket";
 import {ORDER_SCENARIOS, SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
 import {OrderService} from "@/modules/order/order.service";
 import {OrderModel} from "@/modules/order/order.model";
+import {CreateRequestInput} from "@/modules/request/request.validator";
+import {RequestService} from "@/modules/request/request.service";
 
 export class PublicService {
     protected product: Prisma.ProductDelegate;
@@ -34,5 +36,14 @@ export class PublicService {
             .to(SOCKET_ROOMS.ORDER)
             .emit(SOCKET_EVENTS.ORDER_NEW, orderFormatted);
         return orderFormatted;
+    }
+
+    async createRequest(data: CreateRequestInput) {
+        const requestService = new RequestService();
+        const requestCreated = await requestService.create(data);
+        getIO()
+            .to(SOCKET_ROOMS.REQUEST)
+            .emit(SOCKET_EVENTS.REQUEST_NEW, requestCreated);
+        return true;
     }
 }

@@ -89,12 +89,12 @@ async function cancelOrder(id?: number|null): Promise<boolean> {
 
 <template>
     <!-- Empty component -->
-    <Empty v-if="!orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders?.length" description="Chưa có đơn hàng nào" />
+    <Empty v-if="!orderStore.ordersByStatus.find((o: any) => o.statusId === props.status)?.orders?.length" description="Chưa có đơn hàng nào" />
 
     <!-- Show danh sách order -->
     <div v-else>
         <TransitionGroup name="list" tag="div">
-            <div v-for="(order) in orderStore.ordersByStatus.find(o => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mt-3">
+            <div v-for="(order) in orderStore.ordersByStatus.find((o: any) => o.statusId === props.status)?.orders || []" :key="order.id + '_' + order.version" class="mt-3">
                 <CellGroup>
                     <Cell>
                         <template #title>

@@ -112,11 +112,11 @@ model OrderDetail {
   product Product @relation(fields: [productId], references: [id])
 }
 
-model CallRequest {
+model Request {
   id         Int      @id @default(autoincrement())
   tableId    Int
   type       Int
-  status     Int
+  status     Int      @default(1)
   note       String
   assignedTo Int
   createdAt  DateTime @default(now())

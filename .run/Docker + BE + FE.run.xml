@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Docker + BE + FE" type="CompoundRunConfigurationType">
+    <toRun name="BE dev" type="js.build_tools.npm" />
+    <toRun name="FE dev" type="js.build_tools.npm" />
+    <toRun name="Run docker" type="ShConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>

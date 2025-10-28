@@ -1,27 +1,27 @@
 services:
-  backend:
-    build: ./backend
-    container_name: qr_backend
-    ports:
-      - "5001:5000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules  # Giữ node_modules trong container, không bị source ngoài máy đè
-    environment:
-      - PORT=5000
-      - DATABASE_URL=postgresql://postgres:yourpassword@db:5432/qr_order
-    depends_on:
-      - db
-
-  frontend:
-    image: node:18
-    container_name: qr_frontend
-    working_dir: /app
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend:/app
-    command: npm run serve
+#  backend:
+#    build: ./backend
+#    container_name: qr_backend
+#    ports:
+#      - "5001:5000"
+#    volumes:
+#      - ./backend:/app
+#      - /app/node_modules  # Giữ node_modules trong container, không bị source ngoài máy đè
+#    environment:
+#      - PORT=5000
+#      - DATABASE_URL=postgresql://postgres:yourpassword@db:5432/qr_order
+#    depends_on:
+#      - db
+#
+#  frontend:
+#    image: node:18
+#    container_name: qr_frontend
+#    working_dir: /app
+#    ports:
+#      - "3000:3000"
+#    volumes:
+#      - ./frontend:/app
+#    command: npm run serve
 
   db:
     image: postgres:14

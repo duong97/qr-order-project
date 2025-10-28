@@ -11,7 +11,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const logout = async () => {
-    const isLogoutSuccess = await authStore.logout();
+    const isLogoutSuccess = authStore.logout();
     if (isLogoutSuccess) {
         showNotify({ type: "success", message: "Đã đăng xuất!" });
         await router.push({ path: "/login" });

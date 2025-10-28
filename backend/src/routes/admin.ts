@@ -13,6 +13,8 @@ import {OrderController} from "@/modules/order/order.controller";
 import {OrderValidator} from "@/modules/order/order.validator";
 import {TableController} from "@/modules/table/table.controller";
 import {TableValidator} from "@/modules/table/table.validator";
+import {RequestController} from "@/modules/request/request.controller";
+import {RequestValidator} from "@/modules/request/request.validator";
 
 const adminRouter = Router();
 adminRouter.use(authMiddleware);
@@ -38,6 +40,7 @@ const routes = [
     {path: '/options', controller: new OptionController(), validator: new OptionValidator()},
     {path: '/users', controller: userController, validator: new UserValidator()},
     {path: '/orders', controller: orderController, validator: new OrderValidator()},
+    {path: '/requests', controller: new RequestController(), validator: new RequestValidator()},
 ];
 
 for (const route of routes) {

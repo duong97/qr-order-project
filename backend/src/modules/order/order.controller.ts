@@ -14,11 +14,11 @@ export class OrderController extends BaseController<OrderService> {
             const scenario = ORDER_SCENARIOS.LIST;
 
             const queryStatus = String(req.query?.status || '');
-            let filterStatus = queryStatus?.split(',').map(Number);
+            let filterStatus = queryStatus.length ? queryStatus?.split(',').map(Number) : [];
 
             const queryParams = {
                 where: {
-                    orderStatus: {in: filterStatus?.length ? filterStatus : ORDER_STATUSES.NEW}
+                    orderStatus: {in: filterStatus?.length ? filterStatus : [ORDER_STATUSES.NEW]}
                 }
             } as any;
             queryParams.include = OrderModel.getRelations(scenario);

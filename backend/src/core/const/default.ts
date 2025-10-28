@@ -37,3 +37,30 @@ export const ORDER_SCENARIOS = {
     LIST: "list",
 };
 export type OrderScenario = typeof ORDER_SCENARIOS[keyof typeof ORDER_SCENARIOS];
+
+// --- request ---
+export const REQUEST_STATUSES = {
+    NEW: 1,
+    CONFIRM: 2,
+}
+export type RequestStatus = typeof REQUEST_STATUSES[keyof typeof REQUEST_STATUSES];
+export const REQUEST_STATUS_LABELS: Record<RequestStatus, string> = {
+    [REQUEST_STATUSES.NEW]: "Mới",
+    [REQUEST_STATUSES.CONFIRM]: "Đã xác nhận",
+};
+export const REQUEST_SCENARIOS = {
+    LIST: "list",
+};
+export type RequestScenario = typeof REQUEST_SCENARIOS[keyof typeof REQUEST_SCENARIOS];
+// request type
+export const REQUEST_TYPES = {
+    CALL_STAFF: 1,
+    CALL_MANAGER: 2,
+    CALL_CHEF: 3,
+}
+export type RequestType = typeof REQUEST_TYPES[keyof typeof REQUEST_TYPES];
+export const REQUEST_TYPE_LABELS: Record<RequestStatus, string> = {
+    [REQUEST_TYPES.CALL_STAFF]: "Gọi nhân viên",
+    [REQUEST_TYPES.CALL_MANAGER]: "Gọi quản lý",
+    [REQUEST_TYPES.CALL_CHEF]: "Gọi đầu bếp",
+};

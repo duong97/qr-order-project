@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {PublicService} from "@/modules/public/public.service";
 import {OrderInput} from "@/modules/order/order.validator";
 import {TypedRequest} from "@/core/types/request";
+import {CreateRequestInput} from "@/modules/request/request.validator";
 
 export class PublicController {
     protected service: PublicService;
@@ -55,7 +56,7 @@ export class PublicController {
         }
     };
 
-    createRequest = async (req: TypedRequest<OrderInput>, res: Response, next: NextFunction) => {
+    createRequest = async (req: TypedRequest<CreateRequestInput>, res: Response, next: NextFunction) => {
         try {
             const data = await this.service.createRequest(req.body);
             res.json({success: true, data});

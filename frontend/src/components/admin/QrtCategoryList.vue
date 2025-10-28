@@ -19,22 +19,23 @@ const showPopup = ref(false);
 const loading = ref(false);
 const categoryStore = useCategoryStore();
 
-const newCategory = ref<Category>({
+const emptyCategory = {
     id: undefined,
     name: "",
-});
+};
+const currentCategory = ref<Category>({...emptyCategory});
 
 const loadCategoryList = () => categoryStore.adminList();
 
 const createOrUpdate = async () => {
     loading.value = true;
-    const result = await categoryStore.createOrUpdate(toRaw(newCategory.value));
+    const result = await categoryStore.createOrUpdate(toRaw(currentCategory.value));
     loading.value = false;
 
     if (result.success) {
         showNotify({ type: "success", message: "Lưu thành công!" });
         showPopup.value = false;
-        newCategory.value = { id: undefined, name: "" };
+        currentCategory.value = { id: undefined, name: "" };
         await loadCategoryList();
     } else {
         showNotify({ type: "warning", message: result.message });
@@ -43,7 +44,12 @@ const createOrUpdate = async () => {
 
 const showPopupUpdate = (category: Category) => {
     showPopup.value = true;
-    newCategory.value = { ...category };
+    currentCategory.value = { ...category };
+};
+
+const showPopupCreate = () => {
+    showPopup.value = true;
+    currentCategory.value = structuredClone(emptyCategory);
 };
 
 const deleteCategory = async (id: number) => {
@@ -79,7 +85,7 @@ onMounted(loadCategoryList);
             Gom nhóm món ăn theo loại (vd: Trái cây, Nước uống, Món chính, Tráng
             miệng, ...)
         </h2>
-        <Button type="primary" size="small" @click="showPopup = !showPopup">
+        <Button type="primary" size="small" @click="showPopupCreate()">
             Thêm danh mục
         </Button>
     </div>
@@ -119,11 +125,11 @@ onMounted(loadCategoryList);
         teleport="#admin-index-container"
         position="bottom"
     >
-        <NavBar title="Thêm danh mục" />
+        <NavBar :title="currentCategory.id ? `Cập nhật danh mục #${currentCategory.id}` : 'Thêm danh mục'" />
         <Form @submit="createOrUpdate">
             <CellGroup inset>
                 <Field
-                    v-model="newCategory.name"
+                    v-model="currentCategory.name"
                     label="Tên"
                     placeholder="Thức uống..."
                     :rules="[{ required: true, message: getRequireMessage }]"

@@ -1,9 +1,9 @@
 import { BaseRepository } from '@/core/base/base.repository';
 import { prisma } from '@/lib/prisma';
 
-export class TableRepository extends BaseRepository<typeof prisma.category> {
+export class TableRepository extends BaseRepository<typeof prisma.table> {
     constructor() {
-        super(prisma.category);
+        super(prisma.table);
     }
 
     async findByName(name: string) {

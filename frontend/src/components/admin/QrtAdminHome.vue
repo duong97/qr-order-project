@@ -46,7 +46,7 @@ const logout = async () => {
             <Tab title="Tùy chọn" :key="3">
                 <QrtAdminProductOptionList />
             </Tab>
-            <Tab title="Bàn" :key="4">
+            <Tab title="Bàn / Kênh" :key="4">
                 <QrtTableList />
             </Tab>
         </Tabs>

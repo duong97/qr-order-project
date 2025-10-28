@@ -82,6 +82,9 @@ onMounted(loadTableList);
 
 <template>
     <div class="m-2">
+        <h2 class="subtitle is-7">
+            Dùng để quản lý danh sách các bàn hoặc kênh (vd kênh online, tại quầy, app food,...)
+        </h2>
         <Button type="primary" size="small" @click="showPopupCreate()">
             Thêm mới
         </Button>

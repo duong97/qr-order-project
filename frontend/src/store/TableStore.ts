@@ -11,11 +11,16 @@ export const useTableStore = defineStore('table', {
             tableName: useLocalStorage('tableName', 'Khách'),
             customerName: useLocalStorage('customerName', ''),
             items: [] as Table[],
+            currentTable: useLocalStorage('currentTable', {} as Table),
         }
     },
     actions: {
         setName(tableName: string) {
             this.tableName = tableName;
+        },
+        initTable(hash: string) {
+            // set current table from hash
+            // this.tableName = tableName;
         },
         async adminList() {
             this.items = await adminTableApi.list();

@@ -19,6 +19,7 @@ function submitRequest() {
         type: 1
     }).then(res => {
         if (res?.success) {
+            note.value = "";
             showNotify({ type: "success", message: "Lời nhắn của bạn đã được gửi!" });
         } else {
             showNotify({ type: "warning", message: "Có lỗi khi gửi, vui lòng thử lại trong giây lát!" });

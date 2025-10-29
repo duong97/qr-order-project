@@ -66,8 +66,7 @@ async function checkout() {
             :left-disabled="loading"
         >
             <template #title>
-                Checkout bàn
-                <Tag size="large" plain type="warning">{{ tableStore.tableName }}</Tag>
+                Checkout <Tag size="large" plain type="warning">{{ tableStore.tableName }}</Tag>
             </template>
         </NavBar>
     </Sticky>

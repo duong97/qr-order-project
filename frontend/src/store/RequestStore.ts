@@ -23,6 +23,9 @@ export const useRequestStore = defineStore('request', {
         },
         async delete(id: number) {
             return await adminRequestApi.delete(id);
-        }
+        },
+        addItem(item: Request) {
+            this.items.unshift(item);
+        },
     }
 })

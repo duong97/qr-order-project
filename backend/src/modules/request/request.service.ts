@@ -1,5 +1,7 @@
 import {BaseService} from '@/core/base/base.service';
 import {RequestRepository} from "@/modules/request/request.repository";
+import {REQUEST_SCENARIOS} from "@/core/const/default";
+import {RequestModel} from "@/modules/request/request.model";
 
 export class RequestService extends BaseService<RequestRepository> {
     constructor() {
@@ -7,6 +9,7 @@ export class RequestService extends BaseService<RequestRepository> {
     }
 
     async create(data: any) {
-        return this.repository.create(data);
+        const include = RequestModel.getRelations(REQUEST_SCENARIOS.LIST);
+        return this.repository.create(data, include);
     }
 }

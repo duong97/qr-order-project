@@ -2,11 +2,12 @@ import {prisma} from "@/lib/prisma";
 import {Prisma} from "@prisma/client";
 import {OrderInput} from "@/modules/order/order.validator";
 import {getIO} from "@/lib/socket";
-import {ORDER_SCENARIOS, SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
+import {ORDER_SCENARIOS, REQUEST_SCENARIOS, SOCKET_EVENTS, SOCKET_ROOMS} from "@/core/const/default";
 import {OrderService} from "@/modules/order/order.service";
 import {OrderModel} from "@/modules/order/order.model";
 import {CreateRequestInput} from "@/modules/request/request.validator";
 import {RequestService} from "@/modules/request/request.service";
+import {RequestModel} from "@/modules/request/request.model";
 
 export class PublicService {
     protected product: Prisma.ProductDelegate;
@@ -41,9 +42,12 @@ export class PublicService {
     async createRequest(data: CreateRequestInput) {
         const requestService = new RequestService();
         const requestCreated = await requestService.create(data);
+        const requestModel = new RequestModel(requestCreated);
+        const requestFormatted = requestModel.toJSON(REQUEST_SCENARIOS.LIST);
+        console.log('requestFormatted', requestFormatted);
         getIO()
             .to(SOCKET_ROOMS.REQUEST)
-            .emit(SOCKET_EVENTS.REQUEST_NEW, requestCreated);
-        return true;
+            .emit(SOCKET_EVENTS.REQUEST_NEW, requestFormatted);
+        return requestFormatted;
     }
 }

@@ -3,6 +3,7 @@ import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 import { ConfigProvider, Tag, Switch } from "vant";
 import { useTableStore } from "@/store/TableStore";
 import { useAuthStore } from "@/store/AuthStore";
+import QrtAdminRequest from "@/components/admin/QrtAdminRequest.vue";
 
 // Store
 const tableStore = useTableStore();
@@ -92,19 +93,23 @@ watch(
                 <img src="/images/icon.svg" alt="" />
             </a>
 
-            <a
-                role="button"
-                class="navbar-burger"
-                :class="{ 'is-active': isActive }"
-                @click="isActive = !isActive"
-                aria-label="menu"
-                aria-expanded="false"
-            >
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-                <span aria-hidden="true"></span>
-            </a>
+            <div class="navbar-burger" style="margin-right: 30px;">
+                <a
+                    role="button"
+                    :class="{ 'is-active': isActive }"
+                    @click="isActive = !isActive"
+                    aria-label="menu"
+                    aria-expanded="false"
+                >
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+                <div style="margin-right: 75px;">
+                    <QrtAdminRequest v-if="isLogin" key="1"/>
+                </div>
+            </div>
         </div>
 
         <Transition
@@ -148,6 +153,9 @@ watch(
 
                     <router-link v-if="isLogin" @click="toggleNavbar" class="navbar-item" to="/admin">Quản lý</router-link>
                     <router-link v-if="isLogin" @click="toggleNavbar" class="navbar-item" to="/admin/order">Đơn hàng</router-link>
+<!--                    <a class="navbar-item">-->
+<!--                        <QrtAdminRequest v-if="isLogin" key="1" />-->
+<!--                    </a>-->
                 </div>
             </div>
         </Transition>
@@ -205,7 +213,7 @@ watch(
 }
 .popup-welcome-container {
     position: absolute;
-    top: 30%;
+    top: 0;
     left: 0;
     width: 100%;
 }

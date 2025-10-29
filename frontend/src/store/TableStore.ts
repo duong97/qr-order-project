@@ -8,7 +8,7 @@ const adminTableApi = new TableApi();
 export const useTableStore = defineStore('table', {
     state: () => {
         return {
-            tableName: useLocalStorage('tableName', 'Khách'),
+            tableName: useLocalStorage('tableName', 'Khách' as string),
             customerName: useLocalStorage('customerName', ''),
             items: [] as Table[],
             currentTable: useLocalStorage('currentTable', {} as Table),
@@ -18,9 +18,15 @@ export const useTableStore = defineStore('table', {
         setName(tableName: string) {
             this.tableName = tableName;
         },
-        initTable(hash: string) {
-            // set current table from hash
-            // this.tableName = tableName;
+        initTable(hash?: string) {
+            if (!this.currentTable?.id) {
+                this.currentTable = {
+                    id: 1,
+                    name: "Kênh online",
+                    code: "K-OL",
+                }
+                this.tableName = this.currentTable?.name || '';
+            }
         },
         async adminList() {
             this.items = await adminTableApi.list();

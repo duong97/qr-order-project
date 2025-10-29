@@ -18,8 +18,9 @@ const router = createRouter({
             beforeEnter: (to) => {
                 const tableName = (to.query.table || '') as string;
                 const tableStore = useTableStore();
+                tableStore.initTable();
                 if (tableName) {
-                    tableStore.setName(tableName);
+                    // tableStore.setName(tableName);
                     return { path: '/' }
                 } else {
                     return true;
@@ -68,9 +69,10 @@ router.beforeEach((to) => {
         return { name: 'admin' }
     }
 
+    tableStore.initTable();
     const tableName = (to.query.table || '') as string;
     if (tableName) {
-        tableStore.setName(tableName);
+        // tableStore.setName(tableName);
         return { name: 'home' }
     }
 });

@@ -2,8 +2,12 @@ import {Router} from 'express';
 import publicRouter from "./public";
 import adminRouter from "./admin";
 import authRouter from "./auth";
+import {checkSignature} from "@/core/middleware/checkSignature";
 
 const router = Router();
+
+// Check signature
+router.use(checkSignature);
 
 router.use(publicRouter);
 router.use(authRouter);

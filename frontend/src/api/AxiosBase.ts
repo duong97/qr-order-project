@@ -1,15 +1,22 @@
 import axios, {AxiosResponse} from 'axios';
 import config from '@/config';
 import {authHandler} from "@/handler/AuthHandler";
+import {aesEncrypt} from "@/utils/aes";
 
 const AxiosBase = axios.create({
     baseURL: config.cfConfig.apiUrl,
     headers: {
-        'Content-Type': 'application/json',
-        'X-API-KEY': config.cfConfig.apiKey,
+        'Content-Type': 'application/json'
     },
 });
 
+// Before send request
+AxiosBase.interceptors.request.use(async (request) => {
+    request.headers['Qrt-Signature'] = await aesEncrypt([(new Date()).getTime(), process.env.VUE_APP_API_SECRET_KEY].join(""));
+    return request;
+});
+
+// After receive response
 AxiosBase.interceptors.response.use(
     (response: AxiosResponse) => {
         return response;

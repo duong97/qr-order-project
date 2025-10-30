@@ -32,6 +32,13 @@ export class ValidationError extends AppError {
     }
 }
 
+// Signature error
+export class SignatureError extends AppError {
+    constructor(message = 'Invalid signature') {
+        super(message, 400);
+    }
+}
+
 export function errorHandler(
     err: Error | AppError,
     req: Request,
@@ -56,6 +63,13 @@ export function errorHandler(
             success: false,
             message: err.message || "Validation failed",
             errors: err.errors,
+        });
+    }
+
+    if (err instanceof SignatureError) {
+        return res.status(err.statusCode).json({
+            success: false,
+            message: err.message || "Invalid signature",
         });
     }
 

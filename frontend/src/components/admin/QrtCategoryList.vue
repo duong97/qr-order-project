@@ -71,6 +71,8 @@ const deleteCategory = async (id: number) => {
                 });
             }
             await loadCategoryList();
+        }).catch((err) => {
+            console.log(err);
         });
 };
 
@@ -99,19 +101,19 @@ onMounted(loadCategoryList);
             >
                 <template #extra>
                     <Button
-                        @click="showPopupUpdate(item)"
-                        size="mini"
-                        plain
-                        type="warning"
-                        icon="edit"
-                        class="mr-2"
-                    />
-                    <Button
                         @click="deleteCategory(item.id)"
                         size="mini"
                         plain
                         type="danger"
                         icon="cross"
+                        class="mr-2"
+                    />
+                    <Button
+                        @click="showPopupUpdate(item)"
+                        size="mini"
+                        plain
+                        type="warning"
+                        icon="edit"
                     />
                 </template>
             </Cell>

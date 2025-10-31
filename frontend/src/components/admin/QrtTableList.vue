@@ -15,6 +15,8 @@ import {
 } from "vant";
 import {useTableStore} from "@/store/TableStore";
 import Table from "@/interface/Table";
+import ShowQrCode from "@/components/ShowQrCode.vue";
+import QrBatchDownloader from "@/components/QrBatchDownloader.vue";
 
 const showPopup = ref(false);
 const loading = ref(false);
@@ -72,6 +74,9 @@ const deleteTable = async (id: number) => {
                 });
             }
             await loadTableList();
+        })
+        .catch((err) => {
+            console.log(err);
         });
 };
 
@@ -85,9 +90,10 @@ onMounted(loadTableList);
         <h2 class="subtitle is-7">
             Dùng để quản lý danh sách các bàn hoặc kênh (vd kênh online, tại quầy, app food,...)
         </h2>
-        <Button type="primary" size="small" @click="showPopupCreate()">
+        <Button type="primary" size="small" @click="showPopupCreate()" class="mr-2">
             Thêm mới
         </Button>
+        <QrBatchDownloader />
     </div>
 
     <List>
@@ -103,6 +109,14 @@ onMounted(loadTableList);
                 </template>
                 <template #extra>
                     <Button
+                        @click="deleteTable(item.id)"
+                        size="mini"
+                        plain
+                        type="danger"
+                        icon="cross"
+                        class="mr-2"
+                    />
+                    <Button
                         @click="showPopupUpdate(item)"
                         size="mini"
                         plain
@@ -110,13 +124,7 @@ onMounted(loadTableList);
                         icon="edit"
                         class="mr-2"
                     />
-                    <Button
-                        @click="deleteTable(item.id)"
-                        size="mini"
-                        plain
-                        type="danger"
-                        icon="cross"
-                    />
+                    <ShowQrCode :texts_to_show="['test ne']"></ShowQrCode>
                 </template>
             </Cell>
         </TransitionGroup>

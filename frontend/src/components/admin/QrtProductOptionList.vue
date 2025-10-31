@@ -97,6 +97,9 @@ const deleteCategory = async (id: number) => {
             } else {
                 showNotify({ type: "warning", message: result.message || "Lỗi không xác định" });
             }
+        })
+        .catch((err) => {
+            console.log(err);
         });
 };
 
@@ -135,8 +138,8 @@ onMounted(loadProductOptionList);
                 :title="(index + 1) + '. ' + item.name"
             >
                 <template #extra>
-                    <Button @click="showPopupUpdate(item)" size="mini" plain type="warning" icon="edit" class="mr-2" />
-                    <Button @click="deleteCategory(item.id)" size="mini" plain type="danger" icon="cross" />
+                    <Button @click="deleteCategory(item.id)" size="mini" plain type="danger" icon="cross" class="mr-2"/>
+                    <Button @click="showPopupUpdate(item)" size="mini" plain type="warning" icon="edit" />
                 </template>
             </Cell>
         </TransitionGroup>

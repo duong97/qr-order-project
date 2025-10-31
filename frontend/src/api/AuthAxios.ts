@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '@/config';
+import {aesEncrypt} from "@/utils/aes";
 
 /**
  * Class này sử dụng cho các API AUTH
@@ -11,8 +12,13 @@ const AuthAxios = axios.create({
     baseURL: config.cfConfig.apiUrl,
     headers: {
         'Content-Type': 'application/json',
-        'X-API-KEY': config.cfConfig.apiKey,
     },
+});
+
+// Before send request
+AuthAxios.interceptors.request.use(async (request) => {
+    request.headers['Qrt-Signature'] = await aesEncrypt([(new Date()).getTime(), process.env.VUE_APP_API_SECRET_KEY].join(""));
+    return request;
 });
 
 export default AuthAxios;

@@ -139,6 +139,9 @@ const deleteProduct = async (id: number) => {
                 });
             }
             await loadProductList();
+        })
+        .catch((err) => {
+            console.log(err);
         });
 };
 
@@ -169,19 +172,19 @@ const onDeleteImage = () => {
             >
                 <template #extra>
                     <Button
-                        @click="showPopupUpdate(item)"
-                        size="mini"
-                        plain
-                        type="warning"
-                        icon="edit"
-                        class="mr-2"
-                    />
-                    <Button
                         @click="deleteProduct(item.id)"
                         size="mini"
                         plain
                         type="danger"
                         icon="cross"
+                        class="mr-2"
+                    />
+                    <Button
+                        @click="showPopupUpdate(item)"
+                        size="mini"
+                        plain
+                        type="warning"
+                        icon="edit"
                     />
                 </template>
             </Cell>

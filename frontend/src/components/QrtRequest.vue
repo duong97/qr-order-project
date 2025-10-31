@@ -9,12 +9,10 @@ const note = ref<string>("");
 const publicApi = new PublicApi();
 const tableStore = useTableStore();
 
-// @todo xử lý default table id
-// Xử lý generate 1 key ở FE, gửi kèm khi call API
 function submitRequest() {
     isShowPopupRequest.value = false;
     publicApi.createRequest({
-        tableId: 1,
+        tableId: tableStore.currentTable?.id || 0,
         note: note.value,
         type: 1
     }).then(res => {

@@ -10,8 +10,10 @@ import {
     List,
     Cell,
     Tag,
+    Icon,
     showNotify,
     showConfirmDialog,
+    Checkbox,
 } from "vant";
 import {useTableStore} from "@/store/TableStore";
 import Table from "@/interface/Table";
@@ -126,6 +128,9 @@ onMounted(loadTableList);
                     />
                     <ShowQrCode :table="item"></ShowQrCode>
                 </template>
+                <template #label>
+                    <Icon name="success" color="#1a944c" v-if="item.isDefault">Mặc định</Icon>
+                </template>
             </Cell>
         </TransitionGroup>
     </List>
@@ -146,6 +151,18 @@ onMounted(loadTableList);
                     placeholder="A1..."
                     :rules="[{ required: true, message: getRequireMessage }]"
                 />
+                <Checkbox
+                    v-model="currentTable.visible"
+                    class="m-2"
+                >
+                    Còn sử dụng
+                </Checkbox>
+                <Checkbox
+                    v-model="currentTable.isDefault"
+                    class="m-2"
+                >
+                    Mặc định
+                </Checkbox>
             </CellGroup>
             <div style="margin: 16px">
                 <Button

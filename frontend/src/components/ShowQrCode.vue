@@ -2,24 +2,34 @@
 import { watchEffect, onMounted, ref } from "vue";
 import QRCode from 'qrcode'
 import {Button, NavBar, Popup} from "vant";
+import Table from "@/interface/Table";
+import {QrCodeHelper} from "@/helpers/QrCodeHelper";
 
 interface Props {
-    texts_to_show: string[]
+    table?: Table
 }
 const props = defineProps<Props>()
 
 const previews = ref<string[]>([])
 const isShowPopupQrCode = ref<boolean>(false)
 
+const downloadTableQr = async () => {
+    if (props.table?.id) {
+        await QrCodeHelper.download(
+            [{content: props.table.id.toString(), label: `${props.table.code} - ${props.table.name}`}],
+            `QR code ${props.table.code} ${props.table.name}`
+        )
+    }
+}
+
 watchEffect(async () => {
-    console.log('props.texts_to_show', props.texts_to_show)
-    if (props.texts_to_show) {
+    if (props.table?.id) {
         previews.value = await Promise.all(
-            props.texts_to_show.map(async (text) => {
+            [props.table.id.toString()].map(async (text) => {
+                // @todo later: đưa size vào config
                 return await QRCode.toDataURL(text, { width: 120, margin: 1 })
             })
         )
-        console.log('previews.value', previews.value)
     }
 })
 </script>
@@ -37,11 +47,13 @@ watchEffect(async () => {
         position="bottom"
         teleport="body"
     >
-        <NavBar title="QR code" />
+        <NavBar :title="`QR code ${table?.name} - ${table?.code}`" />
         <div class="qr-code-wrapper has-text-centered my-3">
             <div v-for="(src, i) in previews" :key="i">
                 <img :src="src" alt="QR preview"/>
-                <p>Thông tin mã QR code</p>
+                <p class="mt-1">
+                    <Button type="primary" icon="down" size="small" @click="downloadTableQr">Tải xuống</Button>
+                </p>
             </div>
         </div>
     </Popup>

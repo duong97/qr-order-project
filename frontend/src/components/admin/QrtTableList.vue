@@ -93,7 +93,7 @@ onMounted(loadTableList);
         <Button type="primary" size="small" @click="showPopupCreate()" class="mr-2">
             Thêm mới
         </Button>
-        <QrBatchDownloader />
+        <QrBatchDownloader :qr-data="tableStore.items.map((t: Table) => { return {content: t.id, label: t.code}})"/>
     </div>
 
     <List>
@@ -124,7 +124,7 @@ onMounted(loadTableList);
                         icon="edit"
                         class="mr-2"
                     />
-                    <ShowQrCode :texts_to_show="['test ne']"></ShowQrCode>
+                    <ShowQrCode :table="item"></ShowQrCode>
                 </template>
             </Cell>
         </TransitionGroup>

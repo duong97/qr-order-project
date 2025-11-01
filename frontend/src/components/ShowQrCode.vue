@@ -13,6 +13,8 @@ const props = defineProps<Props>()
 const previews = ref<string[]>([])
 const isShowPopupQrCode = ref<boolean>(false)
 
+// @todo show xử lý qr code là link của bàn
+// @todo xử lý tạo 1 config
 const downloadTableQr = async () => {
     if (props.table?.id) {
         await QrCodeHelper.download(

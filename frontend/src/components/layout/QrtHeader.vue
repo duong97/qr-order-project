@@ -93,7 +93,7 @@ watch(
                 <img src="/images/icon.svg" alt="" />
             </a>
 
-            <div class="navbar-burger" style="margin-right: 30px;">
+            <div class="navbar-burger" style="margin-right: 10px;">
                 <a
                     role="button"
                     :class="{ 'is-active': isActive }"
@@ -168,7 +168,7 @@ watch(
         v-if="!isHideBannerOnInit"
         :class="{
       animate__backInUp: isShowBannerWelcome,
-      animate__backOutUp: !isShowBannerWelcome,
+      animate__backOutUp2: !isShowBannerWelcome,
       my_animate_delay: !isShowBannerWelcome
     }"
     >
@@ -213,7 +213,7 @@ watch(
 }
 .popup-welcome-container {
     position: absolute;
-    top: 0;
+    top: 30%;
     left: 0;
     width: 100%;
 }
@@ -222,5 +222,13 @@ watch(
 }
 .my_animate_delay {
     animation-delay: 0.8s;
+}
+.animate__backOutUp2 {
+    animation-name: backOutUp2;
+}
+@keyframes backOutUp2 {
+    0% { transform: scale(1); opacity: 1; }
+    20% { transform: translateY(0) scale(.7); opacity: .7; }
+    100% { transform: translateY(-100vh) scale(.7); opacity: .7;}
 }
 </style>

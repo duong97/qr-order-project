@@ -18,16 +18,16 @@ const isShowPopupQrCode = ref<boolean>(false)
 const downloadTableQr = async () => {
     if (props.table?.id) {
         await QrCodeHelper.download(
-            [{content: props.table.id.toString(), label: `${props.table.code} - ${props.table.name}`}],
+            [{content: (props.table.orderLink || '').toString(), label: `${props.table.code} - ${props.table.name}`}],
             `QR code ${props.table.code} ${props.table.name}`
         )
     }
 }
 
 watchEffect(async () => {
-    if (props.table?.id) {
+    if (props.table?.orderLink) {
         previews.value = await Promise.all(
-            [props.table.id.toString()].map(async (text) => {
+            [(props.table.orderLink || '').toString()].map(async (text) => {
                 // @todo later: đưa size vào config
                 return await QRCode.toDataURL(text, { width: 120, margin: 1 })
             })

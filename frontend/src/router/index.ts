@@ -14,17 +14,18 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
+            component: QrtHome
+        },
+        {
+            path: '/t/:tableIdEncoded',
+            name: 'setTable',
             component: QrtHome,
-            beforeEnter: (to) => {
-                const tableName = (to.query.table || '') as string;
+            beforeEnter: async (to) => {
+                const tableIdEncoded = (to.params.tableIdEncoded || '') as string
+                const tableId = atob(tableIdEncoded);
                 const tableStore = useTableStore();
-                tableStore.initTable();
-                if (tableName) {
-                    // tableStore.setName(tableName);
-                    return { path: '/' }
-                } else {
-                    return true;
-                }
+                await tableStore.initTable(tableId);
+                return { name: 'home' }
             },
         },
         {
@@ -58,22 +59,17 @@ const router = createRouter({
     ]
 });
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
     const authStore = useAuthStore();
     const tableStore = useTableStore();
+
+    await tableStore.initTable();
 
     if (!authStore.isLoggedIn && to.path.startsWith("/admin")) {
         return { name: "login" };
     }
     if (authStore.isLoggedIn && to.name === "login") {
         return { name: 'admin' }
-    }
-
-    tableStore.initTable();
-    const tableName = (to.query.table || '') as string;
-    if (tableName) {
-        // tableStore.setName(tableName);
-        return { name: 'home' }
     }
 });
 

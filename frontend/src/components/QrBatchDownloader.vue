@@ -22,6 +22,7 @@ async function downloadAllQRCodes() {
         :disabled="progress >= 0"
         size="small"
         type="default"
+        icon="down"
     >
         {{ progress >= 0 ? `Đang xử lý... ${progress}%` : props.btnLabel || 'Tải toàn bộ QR (.zip)' }}
     </Button>

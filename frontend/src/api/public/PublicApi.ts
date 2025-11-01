@@ -30,4 +30,17 @@ export class PublicApi extends BaseApi{
         const response = await this.axiosInstance.post(this.path, request);
         return response?.data;
     }
+
+    async getTableById(id?: number) {
+        if (!id) return null;
+        this.path = '/public/table/' + id;
+        const response = await this.axiosInstance.get(this.path);
+        return response?.data;
+    }
+
+    async getTableDefault() {
+        this.path = '/public/table/default';
+        const response = await this.axiosInstance.get(this.path);
+        return response?.data;
+    }
 }

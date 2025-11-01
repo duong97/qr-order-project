@@ -64,3 +64,13 @@ export const REQUEST_TYPE_LABELS: Record<RequestStatus, string> = {
     [REQUEST_TYPES.CALL_MANAGER]: "Gọi quản lý",
     [REQUEST_TYPES.CALL_CHEF]: "Gọi đầu bếp",
 };
+// All scenarios
+export const SCENARIOS = {
+    LIST: "list",
+};
+export type Scenario = typeof SCENARIOS[keyof typeof SCENARIOS];
+// Visible
+export const VISIBLE = {
+    NO: false,
+    YES: true,
+};

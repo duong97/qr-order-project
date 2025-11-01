@@ -93,7 +93,7 @@ onMounted(loadTableList);
         <Button type="primary" size="small" @click="showPopupCreate()" class="mr-2">
             Thêm mới
         </Button>
-        <QrBatchDownloader :qr-data="tableStore.items.map((t: Table) => { return {content: t.id, label: t.code}})"/>
+        <QrBatchDownloader :qr-data="tableStore.items.map((t: Table) => { return {content: t.orderLink, label: t.code}})"/>
     </div>
 
     <List>

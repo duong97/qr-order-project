@@ -64,4 +64,22 @@ export class PublicController {
             next(err);
         }
     };
+
+    getTableById = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const data = await this.service.getTableById(Number(req.params?.id));
+            res.json({success: true, data});
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    getTableDefault = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const data = await this.service.getTableDefault();
+            res.json({success: true, data});
+        } catch (err) {
+            next(err);
+        }
+    };
 }

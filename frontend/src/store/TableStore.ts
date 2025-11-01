@@ -2,8 +2,10 @@ import { defineStore } from 'pinia'
 import { useLocalStorage } from '@vueuse/core'
 import Table from "@/interface/Table";
 import {TableApi} from "@/api/admin/TableApi";
+import {PublicApi} from "@/api/public/PublicApi";
 
 const adminTableApi = new TableApi();
+const publicApi = new PublicApi();
 
 export const useTableStore = defineStore('table', {
     state: () => {
@@ -15,17 +17,22 @@ export const useTableStore = defineStore('table', {
         }
     },
     actions: {
-        setName(tableName: string) {
+        setTableName(tableName: string) {
             this.tableName = tableName;
         },
-        initTable(hash?: string) {
-            if (!this.currentTable?.id) {
-                this.currentTable = {
-                    id: 1,
-                    name: "Kênh online",
-                    code: "K-OL",
-                }
-                this.tableName = this.currentTable?.name || '';
+        setTable(table?: Table) {
+            if (table) {
+                this.currentTable = table;
+                this.setTableName(this.currentTable.name || 'DF')
+            }
+        },
+        async initTable(tableId?: string) {
+            if (tableId) {
+                const _table = await publicApi.getTableById(+tableId);
+                this.setTable(_table.data);
+            } else if (!this.currentTable?.id) {
+                const _table = await publicApi.getTableDefault();
+                this.setTable(_table.data);
             }
         },
         async adminList() {

@@ -19,4 +19,8 @@ router.post('/public/orders', [validate(orderValidator.onCreate)], _publicContro
 const requestValidator = new RequestValidator();
 router.post('/public/requests', [validate(requestValidator.onCreate)], _publicController.createRequest?.bind(_publicController));
 
+// Table
+router.get('/public/table/default', _publicController.getTableDefault?.bind(_publicController));
+router.get('/public/table/:id', _publicController.getTableById?.bind(_publicController));
+
 export default router;

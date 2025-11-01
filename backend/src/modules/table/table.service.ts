@@ -22,4 +22,12 @@ export class TableService extends BaseService<TableRepository> {
         ]);
         return this.repository.update(id, data);
     }
+
+    async getTableDefault() {
+        const tableDefault = await this.repository.findTableDefault();
+        if (!tableDefault) {
+            return await this.repository.findOne({});
+        }
+        return tableDefault;
+    }
 }
